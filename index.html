@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KeploreAI — Production-Ready AI Systems, In Days</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;font-size:16px}
+:root{
+  --w:#ffffff;--off:#f8f8f6;--off2:#f2f1ed;--off3:#eae9e3;
+  --rule:#e4e3de;--rule2:#d2d1ca;
+  --ink:#111110;--ink2:#2c2c28;--mid:#6b6b64;--dim:#9b9b93;--dim2:#c5c4bc;
+  --g:#1a6b5a;--g2:#14573f;--gl:#e8f3f0;--gb:#c8e8e0;--gm:rgba(26,107,90,.1);
+  --b:#1d4ed8;--bl:#eff4fd;--bb:#dbeafe;
+  --rust:#b85c38;
+  --fh:'Instrument Serif',Georgia,serif;
+  --fb:'DM Sans',sans-serif;
+  --fm:'DM Mono',monospace;
+  --r:8px;--rl:14px;--rx:22px;
+  --sh:0 1px 4px rgba(0,0,0,.06),0 2px 12px rgba(0,0,0,.04);
+  --shl:0 6px 32px rgba(0,0,0,.09),0 2px 8px rgba(0,0,0,.04);
+}
+body{font-family:var(--fb);background:var(--w);color:var(--ink);line-height:1.65;overflow-x:hidden;-webkit-font-smoothing:antialiased;}
+
+/* utils */
+.ey{font-family:var(--fm);font-size:11px;font-weight:400;letter-spacing:.1em;text-transform:uppercase;color:var(--g);display:inline-flex;align-items:center;gap:8px;}
+.ey::before{content:'';width:16px;height:1px;background:var(--g);flex-shrink:0;}
+.st{font-family:var(--fh);font-size:clamp(30px,3.8vw,48px);line-height:1.08;letter-spacing:-.02em;color:var(--ink);margin-top:12px;margin-bottom:14px;}
+.ss{font-size:17px;font-weight:300;color:var(--mid);line-height:1.7;max-width:520px;}
+.rv{opacity:0;transform:translateY(20px);transition:opacity .65s ease,transform .65s ease;}
+.rv.in{opacity:1;transform:translateY(0);}
+.d1{transition-delay:.08s}.d2{transition-delay:.16s}.d3{transition-delay:.24s}.d4{transition-delay:.32s}
+
+/* nav */
+nav{position:fixed;top:0;left:0;right:0;z-index:200;height:62px;display:flex;align-items:center;justify-content:space-between;padding:0 40px;background:rgba(255,255,255,.95);backdrop-filter:blur(14px);border-bottom:1px solid var(--rule);}
+.nb{display:flex;align-items:center;gap:9px;text-decoration:none;}
+.nm{width:32px;height:32px;border-radius:8px;background:var(--ink);display:flex;align-items:center;justify-content:center;}
+.nm svg{width:18px;height:18px;}
+.nm img{transition:transform .6s ease;}
+.nb:hover .nm img{transform:rotate(360deg);}
+.nw{font-family:var(--fb);font-size:17px;font-weight:600;color:var(--ink);letter-spacing:-.03em;}
+.nw em{font-style:normal;color:var(--g);}
+.nl{display:flex;align-items:center;gap:2px;}
+.nl a{font-size:13.5px;color:var(--mid);text-decoration:none;padding:6px 12px;border-radius:6px;transition:color .15s,background .15s;font-weight:400;}
+.nl a:hover{color:var(--ink);background:var(--off);}
+.nl a.hi{color:var(--g);font-weight:500;}
+.nl a.hi:hover{background:var(--gl);}
+.nr{display:flex;align-items:center;gap:8px;}
+.ng{font-size:13px;color:var(--mid);padding:7px 15px;border:1px solid var(--rule2);border-radius:var(--r);text-decoration:none;font-weight:500;transition:all .15s;}
+.ng:hover{color:var(--ink);border-color:var(--ink);}
+.ns{font-size:13px;color:var(--w);padding:7px 16px;background:var(--ink);border-radius:var(--r);text-decoration:none;font-weight:500;transition:background .15s;}
+.ns:hover{background:var(--ink2);}
+
+/* hero */
+.hero{padding:130px 40px 80px;max-width:1100px;margin:0 auto;}
+.hl{opacity:0;animation:rise .5s ease .05s forwards;margin-bottom:24px;}
+.hero h1{font-family:var(--fh);font-size:clamp(44px,6vw,80px);line-height:1.03;letter-spacing:-.03em;color:var(--ink);margin-bottom:26px;max-width:860px;opacity:0;animation:rise .65s ease .15s forwards;}
+.hero h1 em{font-style:italic;color:var(--g);}
+.hsub{font-size:19px;font-weight:300;color:var(--mid);line-height:1.7;max-width:580px;margin-bottom:44px;opacity:0;animation:rise .65s ease .28s forwards;}
+.hsub strong{color:var(--ink2);font-weight:500;}
+.hpaths{display:flex;align-items:stretch;gap:14px;flex-wrap:wrap;opacity:0;animation:rise .65s ease .4s forwards;margin-bottom:56px;}
+.pc{border-radius:var(--rl);padding:22px 26px;text-decoration:none;transition:all .2s;display:flex;flex-direction:column;gap:8px;min-width:240px;flex:1;max-width:340px;}
+.pc.ind{background:var(--g);color:var(--w);border:1px solid var(--g);}
+.pc.ind:hover{background:var(--g2);transform:translateY(-2px);box-shadow:var(--shl);}
+.pc.ss{background:var(--w);color:var(--ink);border:1px solid var(--rule2);}
+.pc.ss:hover{border-color:var(--b);transform:translateY(-2px);box-shadow:var(--shl);}
+.ptag{font-family:var(--fm);font-size:10px;letter-spacing:.1em;text-transform:uppercase;font-weight:400;}
+.pc.ind .ptag{color:rgba(255,255,255,.7);}
+.pc.ss .ptag{color:var(--b);}
+.ptit{font-size:15px;font-weight:600;line-height:1.3;}
+.pc.ind .ptit{color:var(--w);}
+.pdesc{font-size:13px;font-weight:300;line-height:1.5;opacity:.8;}
+.pc.ind .pdesc{color:rgba(255,255,255,.8);}
+.pc.ss .pdesc{color:var(--mid);}
+.parr{margin-top:4px;font-size:13px;font-weight:500;display:flex;align-items:center;gap:5px;}
+.pc.ind .parr{color:rgba(255,255,255,.9);}
+.pc.ss .parr{color:var(--b);}
+.htrust{display:flex;align-items:center;gap:24px;flex-wrap:wrap;opacity:0;animation:rise .55s ease .55s forwards;}
+.tc{display:flex;align-items:center;gap:7px;font-size:13px;color:var(--dim);font-weight:400;}
+.tc::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--g);opacity:.5;flex-shrink:0;}
+.tc strong{color:var(--mid);font-weight:500;}
+
+/* sections */
+.sec{padding:96px 40px;}.sec.alt{background:var(--off);}.sec.alt2{background:var(--off2);}
+.si{max-width:1100px;margin:0 auto;}
+
+/* what */
+.wl{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:start;margin-top:56px;}
+.wcard{background:var(--w);border:1px solid var(--rule);border-radius:var(--rl);padding:22px 24px;margin-bottom:12px;transition:border-color .2s,box-shadow .2s;}
+.wcard:hover{border-color:var(--rule2);box-shadow:var(--sh);}
+.wctop{display:flex;align-items:center;gap:12px;margin-bottom:8px;}
+.wi{width:34px;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;}
+.wi.gr{background:var(--gl);}
+.wi.bl{background:var(--bl);}
+.wctit{font-family:var(--fb);font-size:14px;font-weight:600;color:var(--ink);}
+.wcb{font-size:13px;color:var(--mid);line-height:1.6;}
+.wdist{margin-top:28px;padding:22px 24px;background:var(--off2);border-radius:var(--rl);border:1px solid var(--rule);}
+.wdr{display:flex;align-items:center;gap:10px;font-size:13px;padding:6px 0;color:var(--mid);}
+.wdr::before{content:'→';color:var(--g);font-weight:600;flex-shrink:0;}
+.wdr strong{color:var(--ink2);font-weight:500;}
+
+/* cases */
+.cg{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;margin-top:56px;border-radius:var(--rx);overflow:hidden;border:1px solid var(--rule);background:var(--rule);}
+.cc{background:var(--w);padding:32px 26px;transition:background .2s;position:relative;overflow:hidden;}
+.cc:hover{background:var(--off);}
+.ctb{position:absolute;top:0;left:0;right:0;height:3px;}
+.cc.c1 .ctb{background:var(--g);}
+.cc.c2 .ctb{background:#c07020;}
+.cc.c3 .ctb{background:var(--b);}
+.ctag{font-family:var(--fm);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--dim);margin-top:10px;margin-bottom:12px;}
+.cname{font-family:var(--fh);font-size:21px;color:var(--ink);margin-bottom:8px;line-height:1.2;}
+.cco{font-family:var(--fm);font-size:10px;color:var(--dim);margin-bottom:12px;}
+.cb{font-size:13px;color:var(--mid);line-height:1.65;margin-bottom:16px;}
+.cba{display:flex;flex-direction:column;gap:6px;padding:14px 0;border-top:1px solid var(--rule);}
+.bar{display:flex;align-items:baseline;gap:8px;font-size:12px;}
+.bal{font-family:var(--fm);font-size:9px;letter-spacing:.06em;text-transform:uppercase;color:var(--dim2);flex-shrink:0;width:44px;}
+.bav{color:var(--mid);}
+.bav.ok{color:var(--g);font-weight:500;}
+
+/* proof */
+.pl{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:56px;}
+.prc{background:var(--w);border:1px solid var(--rule);border-radius:var(--rl);padding:26px 24px;}
+.prtype{font-family:var(--fm);font-size:10px;letter-spacing:.08em;text-transform:uppercase;margin-bottom:12px;display:inline-block;padding:3px 9px;border-radius:20px;}
+.prtype.cu{background:var(--gl);color:var(--g);border:1px solid var(--gb);}
+.prtype.pa{background:var(--bl);color:var(--b);border:1px solid var(--bb);}
+.prname{font-family:var(--fb);font-size:16px;font-weight:600;color:var(--ink);margin-bottom:8px;}
+.prb{font-size:13px;color:var(--mid);line-height:1.65;margin-bottom:14px;}
+.prm{font-family:var(--fm);font-size:11px;color:var(--dim);padding-top:12px;border-top:1px solid var(--rule);line-height:1.7;}
+.prm span{color:var(--g);}
+
+/* diff */
+.dl{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:start;margin-top:56px;}
+.dclaim{font-family:var(--fh);font-size:25px;line-height:1.4;color:var(--ink);font-style:italic;margin-bottom:24px;padding-left:18px;border-left:3px solid var(--g);}
+.dlist{display:flex;flex-direction:column;gap:16px;}
+.ditem{display:flex;gap:14px;align-items:flex-start;}
+.dicon{width:32px;height:32px;border-radius:8px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:14px;background:var(--off2);border:1px solid var(--rule);margin-top:2px;}
+.dtit{font-size:14px;font-weight:600;color:var(--ink);margin-bottom:3px;}
+.dbod{font-size:13px;color:var(--mid);line-height:1.6;}
+.dvs{font-family:var(--fm);font-size:10px;color:var(--dim2);margin-top:4px;}
+.ctw{border:1px solid var(--rule);border-radius:var(--rl);overflow:hidden;}
+table.ct2{width:100%;border-collapse:collapse;}
+table.ct2 th{padding:11px 14px;font-family:var(--fm);font-size:10px;text-transform:uppercase;letter-spacing:.07em;color:var(--dim);background:var(--off2);border-bottom:1px solid var(--rule);text-align:center;white-space:nowrap;}
+table.ct2 th:first-child{text-align:left;}
+table.ct2 th.k{color:var(--g);background:var(--gl);border-left:1px solid var(--gb);border-right:1px solid var(--gb);}
+table.ct2 td{padding:11px 14px;border-bottom:1px solid var(--rule);font-size:12px;color:var(--mid);text-align:center;background:var(--w);}
+table.ct2 td:first-child{text-align:left;font-size:12px;color:var(--ink2);}
+table.ct2 td.k{background:rgba(26,107,90,.03);border-left:1px solid var(--gb);border-right:1px solid var(--gb);color:var(--g);font-weight:500;}
+table.ct2 tr:last-child td{border-bottom:none;}
+table.ct2 tr:last-child td.k{border-bottom:1px solid var(--gb);}
+table.ct2 tr:hover td{background:var(--off);}
+table.ct2 tr:hover td.k{background:var(--gl);}
+.ck{color:#1a6b5a;font-size:13px;}.cf2{color:var(--dim2);font-size:13px;}.cp2{font-size:11px;color:var(--dim);}
+
+/* dual path dark section */
+.dps{padding:96px 40px;background:var(--ink);position:relative;overflow:hidden;}
+.dps::before{content:'';position:absolute;top:-200px;left:50%;transform:translateX(-50%);width:800px;height:800px;border-radius:50%;background:radial-gradient(circle,rgba(26,107,90,.15) 0%,transparent 65%);pointer-events:none;}
+.dpi{max-width:1100px;margin:0 auto;position:relative;z-index:1;}
+.dpe{font-family:var(--fm);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.35);margin-bottom:14px;display:flex;align-items:center;gap:8px;}
+.dpe::before{content:'';width:16px;height:1px;background:rgba(255,255,255,.25);}
+.dph{font-family:var(--fh);font-size:clamp(30px,3.8vw,50px);color:rgba(255,255,255,.95);line-height:1.1;letter-spacing:-.02em;margin-bottom:14px;}
+.dps2{font-size:17px;font-weight:300;color:rgba(255,255,255,.45);line-height:1.7;max-width:520px;margin-bottom:56px;}
+.dp2{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+.dc{border-radius:var(--rx);padding:36px 32px;text-decoration:none;display:flex;flex-direction:column;transition:transform .2s,box-shadow .25s;}
+.dc:hover{transform:translateY(-3px);box-shadow:0 16px 48px rgba(0,0,0,.3);}
+.dc.di{background:var(--g);border:1px solid rgba(255,255,255,.08);}
+.dc.ds{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);}
+.dc.ds:hover{background:rgba(255,255,255,.08);}
+.dct{font-family:var(--fm);font-size:10px;letter-spacing:.1em;text-transform:uppercase;margin-bottom:18px;}
+.dc.di .dct{color:rgba(255,255,255,.6);}
+.dc.ds .dct{color:rgba(255,255,255,.35);}
+.dcti{font-family:var(--fh);font-size:27px;color:rgba(255,255,255,.95);line-height:1.15;margin-bottom:14px;}
+.dcb{font-size:14px;font-weight:300;line-height:1.7;margin-bottom:22px;flex:1;}
+.dc.di .dcb{color:rgba(255,255,255,.75);}
+.dc.ds .dcb{color:rgba(255,255,255,.45);}
+.dcl{list-style:none;display:flex;flex-direction:column;gap:7px;margin-bottom:26px;}
+.dcl li{font-size:13px;display:flex;align-items:center;gap:8px;}
+.dc.di .dcl li{color:rgba(255,255,255,.75);}
+.dc.ds .dcl li{color:rgba(255,255,255,.45);}
+.dcl li::before{content:'';width:5px;height:5px;border-radius:50%;flex-shrink:0;}
+.dc.di .dcl li::before{background:rgba(255,255,255,.45);}
+.dc.ds .dcl li::before{background:rgba(255,255,255,.2);}
+.dcta{display:inline-flex;align-items:center;gap:7px;font-size:14px;font-weight:600;padding:12px 22px;border-radius:var(--r);text-decoration:none;transition:all .15s;align-self:flex-start;}
+.dc.di .dcta{background:rgba(255,255,255,.14);color:rgba(255,255,255,.95);border:1px solid rgba(255,255,255,.18);}
+.dc.di .dcta:hover{background:rgba(255,255,255,.22);}
+.dc.ds .dcta{background:rgba(255,255,255,.05);color:rgba(255,255,255,.65);border:1px solid rgba(255,255,255,.1);}
+.dc.ds .dcta:hover{background:rgba(255,255,255,.1);color:rgba(255,255,255,.9);}
+
+/* sres */
+.sl{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center;margin-top:56px;}
+.sbulls{display:flex;flex-direction:column;gap:20px;margin-top:28px;}
+.sbull{display:flex;gap:14px;align-items:flex-start;}
+.sdot{width:8px;height:8px;border-radius:50%;background:var(--g);flex-shrink:0;margin-top:7px;}
+.sbt{font-size:14px;font-weight:600;color:var(--ink);margin-bottom:3px;}
+.sbb{font-size:13px;color:var(--mid);line-height:1.6;}
+.spanel{background:var(--ink);border-radius:var(--rx);overflow:hidden;box-shadow:var(--shl);}
+.spbar{padding:12px 18px;display:flex;align-items:center;gap:6px;border-bottom:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.04);}
+.sdui{width:8px;height:8px;border-radius:50%;}
+.spt{font-family:var(--fm);font-size:11px;color:rgba(255,255,255,.3);margin-left:6px;}
+.slb{padding:20px;font-family:var(--fm);font-size:11px;line-height:1.9;}
+.lr{display:flex;gap:10px;}
+.lt{color:rgba(255,255,255,.2);flex-shrink:0;}
+.le{color:rgba(255,255,255,.45);}
+.le.ok{color:#4ade80;}.le.run{color:#34d399;}.le.val{color:#fbbf24;}
+.sstats{display:flex;border-top:1px solid rgba(255,255,255,.08);}
+.sstat{flex:1;padding:16px;text-align:center;border-right:1px solid rgba(255,255,255,.08);}
+.sstat:last-child{border-right:none;}
+.ssn{font-family:var(--fm);font-size:20px;font-weight:500;color:#c8f135;letter-spacing:-.04em;}
+.ssl{font-size:10px;color:rgba(255,255,255,.3);margin-top:2px;}
+
+
+/* cta */
+.ctas{padding:120px 40px;background:var(--off);border-top:1px solid var(--rule);text-align:center;}
+.ctai{max-width:620px;margin:0 auto;}
+.ctat{font-family:var(--fh);font-size:clamp(32px,4.5vw,56px);line-height:1.1;letter-spacing:-.02em;color:var(--ink);margin-top:14px;margin-bottom:18px;}
+.ctat em{font-style:italic;color:var(--g);}
+.ctas2{font-size:17px;font-weight:300;color:var(--mid);line-height:1.7;margin-bottom:40px;}
+.ctar{display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:28px;flex-wrap:wrap;}
+.bp{background:var(--g);color:var(--w);padding:14px 28px;border-radius:var(--r);font-family:var(--fb);font-weight:600;font-size:15px;text-decoration:none;letter-spacing:-.01em;display:inline-flex;align-items:center;gap:7px;transition:background .15s,transform .2s,box-shadow .2s;}
+.bp:hover{background:var(--g2);transform:translateY(-2px);box-shadow:0 8px 24px rgba(26,107,90,.28);}
+.bs{padding:14px 24px;border-radius:var(--r);border:1px solid var(--rule2);color:var(--mid);font-size:15px;text-decoration:none;transition:all .15s;}
+.bs:hover{border-color:var(--ink);color:var(--ink);}
+.ctam{display:flex;justify-content:center;gap:24px;flex-wrap:wrap;}
+.ctam span{font-family:var(--fm);font-size:11px;color:var(--dim2);}
+
+/* footer */
+footer{background:var(--w);border-top:1px solid var(--rule);padding:36px 40px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;}
+.fb2{display:flex;align-items:center;gap:8px;text-decoration:none;}
+.fw{font-size:15px;font-weight:600;color:var(--ink);letter-spacing:-.02em;}
+.fw em{font-style:normal;color:var(--g);}
+.fl{display:flex;gap:20px;flex-wrap:wrap;}
+.fl a{font-size:13px;color:var(--dim);text-decoration:none;transition:color .15s;}
+.fl a:hover{color:var(--mid);}
+.fcp{font-family:var(--fm);font-size:11px;color:var(--dim2);}
+
+/* try dropdown */
+.ndd{position:relative;}
+.nds{font-size:13px;color:var(--w);padding:7px 14px;background:var(--ink);border-radius:var(--r);font-weight:500;cursor:pointer;border:none;font-family:var(--fb);display:flex;align-items:center;gap:0;transition:background .15s;}
+.nds:hover{background:var(--ink2);}
+.ndv{margin:0 8px;opacity:.35;font-weight:300;}
+.nda{font-size:11px;transition:transform .2s;}
+.nds.open .nda{transform:rotate(180deg);}
+.ndm{position:absolute;top:calc(100% + 10px);right:0;background:var(--w);border:1px solid var(--rule);border-radius:var(--rl);box-shadow:var(--shl);min-width:260px;overflow:hidden;opacity:0;pointer-events:none;transform:translateY(-6px);transition:opacity .15s,transform .15s;z-index:300;}
+.ndm.open{opacity:1;pointer-events:all;transform:translateY(0);}
+.ndmi{display:flex;align-items:center;gap:12px;padding:12px 16px;text-decoration:none;transition:background .15s;border-bottom:1px solid var(--rule);}
+.ndmi:last-child{border-bottom:none;}
+.ndmi:hover{background:var(--off);}
+.ndmi-t{font-size:13px;font-weight:600;color:var(--ink);}
+.ndmi-s{font-size:11px;color:var(--dim);margin-top:2px;}
+
+@keyframes rise{from{opacity:0;transform:translateY(18px);}to{opacity:1;transform:translateY(0);}}
+
+@media(max-width:1024px){
+  nav{padding:0 20px;}.nl{display:none;}
+  .hero{padding:110px 20px 60px;}
+  .sec,.dps,.ctas{padding:72px 20px;}
+  .wl,.dl,.sl{grid-template-columns:1fr;gap:40px;}
+  .cg,.pl{grid-template-columns:1fr;}
+  .dp2{grid-template-columns:1fr;}
+  .hpaths{flex-direction:column;}.pc{max-width:100%;}
+  footer{flex-direction:column;text-align:center;}.fl{justify-content:center;}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nb">
+    <div class="nm">
+      <img src="logo.jpg" style="width:22px;height:22px;object-fit:contain;filter:invert(1);">
+    </div>
+    <span class="nw">Keplore<em>AI</em></span>
+  </a>
+  <div class="nl">
+    <a href="index.html" style="color:var(--ink);font-weight:500;">Home</a>
+    <a href="integrators.html" class="hi">Industrial AI →</a>
+    <a href="https://physical-mind.ai/" target="_blank">Self-Service</a>
+    <a href="#usecases">Use Cases</a>
+    <a href="#contact">Contact</a>
+  </div>
+  <div class="nr">
+    <div class="ndd" id="tryDrop">
+      <button class="ns nds" onclick="toggleDrop()" aria-expanded="false">
+        Try PhysMind <span class="ndv">|</span> <span class="nda">&#8964;</span>
+      </button>
+      <div class="ndm" id="tryMenu">
+        <a href="https://lab.physmind.ai/engineers#install-cli" target="_blank" class="ndmi">
+          <div><div class="ndmi-t">PhysMind CLI</div><div class="ndmi-s">macOS · Windows · Linux</div></div>
+        </a>
+        <a href="https://lab.physmind.ai/engineers#install-vscode" target="_blank" class="ndmi">
+          <div><div class="ndmi-t">PhysMind VSCode Extension</div><div class="ndmi-s">Industrial knowledge while coding</div></div>
+        </a>
+        <a href="https://lab.physmind.ai/engineers#install-mindact" target="_blank" class="ndmi">
+          <div><div class="ndmi-t">PhysMindAct</div><div class="ndmi-s">Desktop app · Visual skills management</div></div>
+        </a>
+        <a href="https://lab.physmind.ai/chat" target="_blank" class="ndmi">
+          <div><div class="ndmi-t">PhysMind Online Lab</div><div class="ndmi-s">Browser sandbox · No install needed</div></div>
+        </a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hl"><span class="ey">KeploreAI · Santa Clara, CA</span></div>
+  <h1>AI systems that <em>hold up</em><br>in production.</h1>
+  <p class="hsub">Keplore builds <strong>production-ready AI systems</strong> for hard, real-world problems — in days, not months. Powered by PhysMind (formerly SRES), our autonomous AI engineering engine.</p>
+  <div class="hpaths">
+    <a href="integrators.html" class="pc ind">
+      <div class="ptag">Industrial AI Solutions</div>
+      <div class="ptit">AI perception for systems integrators &amp; OEMs</div>
+      <div class="pdesc">Vision inspection, robot guidance, and ID verification — packaged with acceptance criteria, FAT/SAT docs, and governed updates. We handle the AI. You keep everything else.</div>
+      <div class="parr">Explore Industrial AI →</div>
+    </a>
+    <a href="https://physical-mind.ai/" target="_blank" class="pc ss">
+      <div class="ptag">Self-Service Agent</div>
+      <div class="ptit">Explore your AI problem directly with PhysMind</div>
+      <div class="pdesc">Describe your problem. PhysMind plans, experiments, validates, and delivers a working AI system — autonomously. For engineers and technical teams without a dedicated ML pipeline.</div>
+      <div class="parr" style="color:var(--b)">Try the agent →</div>
+    </a>
+  </div>
+  <div class="htrust">
+    <div class="tc"><strong>90% faster</strong> than manual ML engineering</div>
+    <div class="tc"><strong>Paying customers</strong> in production</div>
+  </div>
+</div>
+
+<!-- WHAT WE DO -->
+<section class="sec alt" id="what">
+  <div class="si">
+    <div class="ey rv">What KeploreAI Does</div>
+    <h2 class="st rv">AI coding tools build code.<br>We build systems that learn.</h2>
+    <p class="ss rv">There's a fundamental difference between writing software and building an AI system. Software connects components — once the logic is right, it generalizes. AI systems require experimentation under constraints, continuous validation, and adaptation as data shifts. Keplore automates the hard part.</p>
+    <div class="wl">
+      <div class="rv">
+        <div class="wdist">
+          <div class="wdr"><strong>Software engineering</strong> — connect components, logic generalizes, rarely retrained</div>
+          <div class="wdr"><strong>AI systems engineering</strong> — experiment under constraints, validate multiple candidates, continuously adapt as data shifts</div>
+          <div class="wdr"><strong>Keplore</strong> — automates the experimentation, validation, and adaptation loop. Delivers the system, not just the model.</div>
+        </div>
+        <p style="margin-top:24px;font-size:14px;color:var(--mid);line-height:1.7;">The gap between <em style="color:var(--ink2)">"model that works in a notebook"</em> and <em style="color:var(--ink2)">"AI system that holds up in production"</em> is enormous. No existing tool — coding assistants, off-the-shelf models, or manual ML engineering — closes it reliably. That gap is what KeploreAI is built to solve.</p>
+      </div>
+      <div class="rv d1">
+        <div class="wcard">
+          <div class="wctop"><div class="wi gr">⚙️</div><div class="wctit">PhysMind — Autonomous AI System Builder</div></div>
+          <div class="wcb">Plans, experiments, evaluates, validates, and deploys AI systems without manual ML engineering at every step. What used to take one engineer 2–3 months, PhysMind delivers in days.</div>
+        </div>
+        <div class="wcard">
+          <div class="wctop"><div class="wi gr">🏭</div><div class="wctit">Industrial AI Solutions</div></div>
+          <div class="wcb">Production-ready perception modules for manufacturers, OEMs, and systems integrators — packaged with acceptance criteria, validation evidence, and a governed update process that survives go-live.</div>
+        </div>
+        <div class="wcard">
+          <div class="wctop"><div class="wi bl">🤖</div><div class="wctit">Self-Service Agent</div></div>
+          <div class="wcb">Technical users describe their AI problem directly. PhysMind autonomously builds, validates, and deploys — accessible via agent interface for exploratory and applied AI work across industries.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- USE CASES -->
+<section class="sec" id="usecases">
+  <div class="si">
+    <div class="ey rv">Use Cases</div>
+    <h2 class="st rv">Real problems.<br>Real deployments.</h2>
+    <p class="ss rv">Keplore works where standard models break down — variable environments, mission-critical accuracy, and production conditions that change over time.</p>
+    <div class="cg">
+      <div class="cc c1 rv">
+        <div class="ctb"></div>
+        <div class="ctag">Industrial Inspection · Active Customer</div>
+        <div class="cname">Magnet Defect Detection</div>
+        <div class="cco">Global MoE supplier · EV &amp; smart home OEMs</div>
+        <div class="cb">A global magnetics supplier serving EV and smart home OEMs needed defect detection that could self-adapt as product variants and factory conditions changed — without an ML engineer on-site for every update. Traditional Halcon-based vision required 2–3 months per model rebuild with no self-adaptation.</div>
+        <div class="cba">
+          <div class="bar"><span class="bal">Before</span><span class="bav">1 engineer · 2–3 months per model · no adaptation · $1,000+ per deploy</span></div>
+          <div class="bar"><span class="bal">After</span><span class="bav ok">3–7 days · self-adapting · $500/deploy · 90% faster time-to-deployment</span></div>
+        </div>
+      </div>
+      <div class="cc c2 rv d1">
+        <div class="ctb"></div>
+        <div class="ctag">Robot Guidance · Active Customer</div>
+        <div class="cname">Robotic Insertion &amp; Alignment</div>
+        <div class="cco">Design for Making · Idaho Falls, ID · FANUC certified integrator</div>
+        <div class="cb">A FANUC-certified robotics integrator needed an AI perception system to locate bucket opening centers and compute precise displacement coordinates (ΔX, ΔY in cm) for robotic arm insertion — reliably, with retry and fallback logic that native iRVision couldn't provide for this application.</div>
+        <div class="cba">
+          <div class="bar"><span class="bal">Problem</span><span class="bav">Variable bucket positioning exceeded native vision capabilities</span></div>
+          <div class="bar"><span class="bal">Output</span><span class="bav ok">Typed coordinate output · confidence score · retry/hold/divert logic · local edge deployment</span></div>
+        </div>
+      </div>
+      <div class="cc c3 rv d2">
+        <div class="ctb"></div>
+        <div class="ctag">Autonomous Systems · Technical Evaluation</div>
+        <div class="cname">Autonomous Driving Perception</div>
+        <div class="cco">Performance automotive OEM · technical discussions</div>
+        <div class="cb">A performance automotive OEM initiated technical discussions around AI system validation for autonomous driving experimentation — where pre-trained models fail to adapt to novel conditions and there is no reliable way to fine-tune or verify behavior once deployed in dynamic environments.</div>
+        <div class="cba">
+          <div class="bar"><span class="bal">Challenge</span><span class="bav">Pre-trained models can't adapt to novel terrain, lighting, or physics in real time</span></div>
+          <div class="bar"><span class="bal">Fit</span><span class="bav ok">PhysMind: self-builds, validates, and adapts without engineers in the loop</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TRACTION -->
+<section class="sec alt2" id="traction">
+  <div class="si">
+    <div class="ey rv">Traction</div>
+    <h2 class="st rv">In production.<br>With real partners.</h2>
+    <p class="ss rv">Paying customers, strategic partnerships, and validated commercial demand — across industrial AI and broader AI systems engineering.</p>
+    <div class="pl">
+      <div class="prc rv">
+        <div class="prtype cu">Paying Customer</div>
+        <div class="prname">Global Magnetics Supplier</div>
+        <div class="prb">EV and smart home OEM supplier. Vision inspection module in active production. Deployment target: 1,000–5,000 machines per year. Initial pilot: 2 machines, $1,000 in revenue.</div>
+        <div class="prm">Revenue model: <span>$500/machine · $50–100/yr self-adapting subscription</span><br>Result: <span>90% reduction in time-to-deployment · Jan 2026</span></div>
+      </div>
+      <div class="prc rv d1">
+        <div class="prtype cu">Paying Customer</div>
+        <div class="prname">Design for Making</div>
+        <div class="prb">FANUC-certified robotics integrator, Idaho Falls ID. Robot guidance module for bucket insertion tasks. Deployment target: 30–50 machines per year.</div>
+        <div class="prm">Module: <span>Robot Guidance · perception + displacement output</span><br>Status: <span>Active collaboration · Feb 2026</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHY DIFFERENT -->
+<section class="sec" id="why">
+  <div class="si">
+    <div class="ey rv">Why Keplore</div>
+    <h2 class="st rv">Not a consulting shop.<br>Not a generic platform.</h2>
+    <p class="ss rv">Keplore is an AI technology company that delivers real solutions. The distinction matters when you're putting AI into production and someone has to be accountable for whether it holds up.</p>
+    <div class="dl">
+      <div class="rv">
+        <div class="dclaim">"AI coding tools build code. We build systems that learn — and keep learning after go-live."</div>
+        <div class="dlist">
+          <div class="ditem">
+            <div class="dicon">📋</div>
+            <div>
+              <div class="dtit">Validation evidence, not demos</div>
+              <div class="dbod">Every deployment includes acceptance criteria agreed before build starts, test results, and a validation package — not a demo that passes once and never gets checked again.</div>
+              <div class="dvs">vs. AI startups who deliver a model and move on</div>
+            </div>
+          </div>
+          <div class="ditem">
+            <div class="dicon">🔄</div>
+            <div>
+              <div class="dtit">Systems that adapt, not stale models</div>
+              <div class="dbod">PhysMind continuously monitors production performance. When data shifts, it proposes a governed update — you review and approve. Nothing changes without sign-off. Instant rollback available.</div>
+              <div class="dvs">vs. ML platforms that require your engineers to manage drift</div>
+            </div>
+          </div>
+          <div class="ditem">
+            <div class="dicon">⚡</div>
+            <div>
+              <div class="dtit">Days, not months</div>
+              <div class="dbod">Traditional ML engineering: one engineer, 2–3 months per deployment, no self-adaptation. PhysMind automates the experimentation, comparison, and validation loop — delivering in days at a fraction of the cost.</div>
+              <div class="dvs">vs. custom ML shops and manual integration work</div>
+            </div>
+          </div>
+          <div class="ditem">
+            <div class="dicon">🎯</div>
+            <div>
+              <div class="dtit">Typed outputs, not black boxes</div>
+              <div class="dbod">Every module has a defined output contract: structured results, confidence scores, and defined handling for edge cases and unknowns. The downstream system always knows exactly what it will receive.</div>
+              <div class="dvs">vs. AI platforms that hand off opaque model outputs</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="rv d1">
+        <div class="ctw">
+          <table class="ct2">
+            <thead>
+              <tr>
+                <th></th><th>Manual ML</th><th>AI Platforms</th><th class="k">Keplore</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>Delivers in days</td><td><span class="cf2">—</span></td><td><span class="cp2">Sometimes</span></td><td class="k"><span class="ck">✓</span></td></tr>
+              <tr><td>Acceptance criteria upfront</td><td><span class="cp2">Varies</span></td><td><span class="cf2">—</span></td><td class="k"><span class="ck">✓ Always</span></td></tr>
+              <tr><td>Validation evidence at handoff</td><td><span class="cp2">Varies</span></td><td><span class="cf2">—</span></td><td class="k"><span class="ck">✓ Every build</span></td></tr>
+              <tr><td>Governed post-deploy updates</td><td><span class="cf2">—</span></td><td><span class="cf2">—</span></td><td class="k"><span class="ck">✓ Standard</span></td></tr>
+              <tr><td>Typed output contracts</td><td><span class="cf2">—</span></td><td><span class="cf2">—</span></td><td class="k"><span class="ck">✓ Every module</span></td></tr>
+              <tr><td>Self-adapts to data drift</td><td><span class="cf2">—</span></td><td><span class="cp2">Partial</span></td><td class="k"><span class="ck">✓ PhysMind</span></td></tr>
+              <tr><td>Works without your ML team</td><td><span class="cf2">—</span></td><td><span class="cf2">—</span></td><td class="k"><span class="ck">✓ That's the point</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DUAL PATH DARK -->
+<div class="dps" id="paths">
+  <div class="dpi">
+    <div class="dpe rv">Two Ways to Work With Keplore</div>
+    <h2 class="dph rv">One engine.<br>Two entry points.</h2>
+    <p class="dps2 rv">Whether you need a deployed solution for your production line, or you want to work directly with the AI system builder — Keplore has a path for you.</p>
+    <div class="dp2">
+      <a href="integrators.html" class="dc di rv">
+        <div class="dct">Industrial AI Solutions</div>
+        <div class="dcti">For integrators, OEMs, and manufacturers with hard perception problems</div>
+        <div class="dcb">Production-ready AI perception modules — packaged with everything an integrator needs to commission, hand off, and support. We handle the AI. You keep the PLC, safety, commissioning, and customer relationship.</div>
+        <ul class="dcl">
+          <li>Vision Inspection · Robot Guidance · ID &amp; Verification</li>
+          <li>Acceptance criteria defined before build starts</li>
+          <li>FAT/SAT documentation · validation evidence pack</li>
+          <li>Governed updates — you approve every change, with rollback</li>
+          <li>Works with FANUC, Yaskawa, ABB, UR and more</li>
+        </ul>
+        <span class="dcta">Explore Industrial AI <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M8 3l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      </a>
+      <a href="https://physical-mind.ai/" target="_blank" class="dc ds rv d1">
+        <div class="dct">Self-Service · AI Agent</div>
+        <div class="dcti">For engineers and technical teams building AI systems</div>
+        <div class="dcb">Describe your AI problem. PhysMind takes over: plans the approach, runs experiments, evaluates candidates, validates performance, and deploys a working system — without you managing the ML engineering pipeline.</div>
+        <ul class="dcl">
+          <li>Describe the problem in plain language</li>
+          <li>PhysMind builds, experiments, and validates autonomously</li>
+          <li>Get a working AI system with evidence — not just a prototype</li>
+          <li>For technical teams without dedicated ML infrastructure</li>
+        </ul>
+        <span class="dcta">Try the Agent <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M8 3l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- PhysMind TECHNOLOGY -->
+<section class="sec alt" id="technology">
+  <div class="si">
+    <div class="ey rv">The Engine</div>
+    <h2 class="st rv">PhysMind: Autonomous AI<br>system builder.</h2>
+    <p class="ss rv">Beyond coding tools and model wrappers — PhysMind plans, experiments, validates, and deploys AI systems that adapt to real-world conditions without manual ML engineering at every step.</p>
+    <div class="sl">
+      <div class="rv">
+        <div class="sbulls">
+          <div class="sbull"><div class="sdot"></div><div><div class="sbt">Agentic decision-making</div><div class="sbb">Tracks performance at every stage — training, testing, deployment. Adapts like a senior ML engineer: tunes hyperparameters, selects architectures, identifies failure modes — without being asked.</div></div></div>
+          <div class="sbull"><div class="sdot"></div><div><div class="sbt">Autonomous experimentation</div><div class="sbb">Automatically compares and analyzes multiple model candidates. Selects the best approach for the specific constraints of the problem — not a pre-selected template or generic foundation model.</div></div></div>
+          <div class="sbull"><div class="sdot"></div><div><div class="sbt">Multi-layer validation</div><div class="sbb">Multiple LLM roles (actor, critic, validator) operating simultaneously. OS-level checks across processes, files, and metrics. Mathematical reasoning combining semantic and logic tests. Nothing declared done until all layers pass.</div></div></div>
+          <div class="sbull"><div class="sdot"></div><div><div class="sbt">Self-correcting in production</div><div class="sbb">The same engine that builds the system also maintains it. Detects performance drift, proposes governed updates, validates changes before deployment. The system improves without requiring your engineers to manage the loop.</div></div></div>
+        </div>
+      </div>
+      <div class="rv d1">
+        <div class="spanel">
+          <div class="spbar">
+            <div class="sdui" style="background:#ef4444"></div>
+            <div class="sdui" style="background:#f59e0b;margin-left:4px"></div>
+            <div class="sdui" style="background:#22c55e;margin-left:4px"></div>
+            <div class="spt">sres_build.log — vision_inspection_v1</div>
+          </div>
+          <div class="slb">
+            <div class="lr"><span class="lt">00:01</span><span class="le">problem scope parsed · acceptance criteria loaded</span></div>
+            <div class="lr"><span class="lt">00:04</span><span class="le run">experiment set initialized · 12 candidates queued</span></div>
+            <div class="lr"><span class="lt">00:31</span><span class="le">candidates 01–04 evaluated · 3 eliminated on latency</span></div>
+            <div class="lr"><span class="lt">01:12</span><span class="le run">top 3 advancing · hyperparameter sweep running</span></div>
+            <div class="lr"><span class="lt">02:48</span><span class="le">failure mode analysis · 2 edge cases flagged</span></div>
+            <div class="lr"><span class="lt">03:10</span><span class="le run">edge cases captured · labeling guide updated</span></div>
+            <div class="lr"><span class="lt">05:22</span><span class="le val">validation pass · accuracy 96.8% · threshold 95%  ✓</span></div>
+            <div class="lr"><span class="lt">06:44</span><span class="le run">regression suite compiled · 847 test cases</span></div>
+            <div class="lr"><span class="lt">07:30</span><span class="le ok">acceptance criteria met · evidence pack generated ✓</span></div>
+            <div class="lr"><span class="lt">07:31</span><span class="le ok">module ready for integration handoff ✓</span></div>
+          </div>
+          <div class="sstats">
+            <div class="sstat"><div class="ssn">~7h</div><div class="ssl">build to evidence pack</div></div>
+            <div class="sstat"><div class="ssn">90%</div><div class="ssl">faster vs manual ML</div></div>
+            <div class="sstat"><div class="ssn">847</div><div class="ssl">test cases generated</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="ctas" id="contact">
+  <div class="ctai">
+    <span class="ey" style="justify-content:center;margin-left:24px;">Get Started</span>
+    <h2 class="ctat">Have an AI problem<br>that <em>won't stay solved?</em></h2>
+    <p class="ctas2">Tell us what you're building. We'll tell you whether Keplore is the right fit — and what it would take to get there.</p>
+    <div class="ctar">
+      <a href="mailto:hello@keploreai.com" class="bp">Talk to our team <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M8 3l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+      <a href="integrators.html" class="bs">Industrial AI solutions →</a>
+    </div>
+    <div class="ctam">
+      <span>→ No commitment required</span>
+      <span>→ 30-min scoping call</span>
+      <span>→ Real engineers on the call</span>
+    </div>
+  </div>
+</section>
+
+<!-- PRODUCTS & SOLUTIONS -->
+<div style="background:var(--ink);padding:56px 40px;">
+  <div style="max-width:1100px;margin:0 auto;display:flex;gap:80px;flex-wrap:wrap;">
+    <div>
+      <p style="font-family:var(--fb);font-size:18px;font-weight:600;color:rgba(255,255,255,.95);margin-bottom:24px;">Products</p>
+      <div style="display:flex;flex-direction:column;gap:14px;">
+        <a href="https://lab.physmind.ai/engineers#install-cli" target="_blank" style="font-size:16px;color:rgba(255,255,255,.65);text-decoration:none;transition:color .15s;" onmouseover="this.style.color='rgba(255,255,255,.95)'" onmouseout="this.style.color='rgba(255,255,255,.65)'">PhysMind CLI</a>
+        <a href="https://lab.physmind.ai/engineers#install-vscode" target="_blank" style="font-size:16px;color:rgba(255,255,255,.65);text-decoration:none;transition:color .15s;" onmouseover="this.style.color='rgba(255,255,255,.95)'" onmouseout="this.style.color='rgba(255,255,255,.65)'">PhysMind VSCode Extension</a>
+        <a href="https://lab.physmind.ai/engineers#install-mindact" target="_blank" style="font-size:16px;color:rgba(255,255,255,.65);text-decoration:none;transition:color .15s;" onmouseover="this.style.color='rgba(255,255,255,.95)'" onmouseout="this.style.color='rgba(255,255,255,.65)'">PhysMindAct</a>
+        <a href="https://lab.physmind.ai/chat" target="_blank" style="font-size:16px;color:rgba(255,255,255,.65);text-decoration:none;transition:color .15s;" onmouseover="this.style.color='rgba(255,255,255,.95)'" onmouseout="this.style.color='rgba(255,255,255,.65)'">PhysMind Online Lab</a>
+      </div>
+    </div>
+    <div>
+      <p style="font-family:var(--fb);font-size:18px;font-weight:600;color:rgba(255,255,255,.95);margin-bottom:24px;">Solutions</p>
+      <div style="display:flex;flex-direction:column;gap:14px;">
+        <a href="integrator-overview.html" style="font-size:16px;color:rgba(255,255,255,.65);text-decoration:none;transition:color .15s;" onmouseover="this.style.color='rgba(255,255,255,.95)'" onmouseout="this.style.color='rgba(255,255,255,.65)'">For Integrators</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <a href="index.html" class="fb2">
+    <div class="nm" style="width:26px;height:26px;border-radius:6px;">
+      <img src="logo.jpg" style="width:16px;height:16px;object-fit:contain;filter:invert(1);">
+    </div>
+    <span class="fw">Keplore<em>AI</em></span>
+  </a>
+  <div class="fl">
+    <a href="#what">What We Do</a>
+    <a href="#usecases">Use Cases</a>
+    <a href="integrators.html">Industrial AI</a>
+    <a href="https://physical-mind.ai/" target="_blank">Self-Service</a>
+    <a href="#technology">Technology</a>
+    <a href="#contact">Contact</a>
+    <a href="integrator-overview.html">For Integrators</a>
+  </div>
+  <div class="fcp">© 2026 KeploreAI Inc. · Santa Clara, CA</div>
+</footer>
+
+<script>
+function toggleDrop(){const btn=document.querySelector('.nds');const menu=document.getElementById('tryMenu');const open=menu.classList.toggle('open');btn.classList.toggle('open',open);btn.setAttribute('aria-expanded',open);}
+document.addEventListener('click',e=>{if(!document.getElementById('tryDrop').contains(e.target)){document.getElementById('tryMenu').classList.remove('open');document.querySelector('.nds').classList.remove('open');}});
+const obs=new IntersectionObserver(e=>{e.forEach(en=>{if(en.isIntersecting)en.target.classList.add('in');});},{threshold:.08,rootMargin:'0px 0px -30px 0px'});
+document.querySelectorAll('.rv').forEach(el=>obs.observe(el));
+</script>
+</body>
+</html>
