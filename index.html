@@ -7,7 +7,7 @@
   (function(){
     try{
       var t=localStorage.getItem('theme');
-      if(!t||t==='auto') t=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';
+      if(!t||t==='auto') t='dark';
       document.documentElement.setAttribute('data-theme',t);
     }catch(e){}
   })();
