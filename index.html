@@ -3,6 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script>
+  (function(){
+    try{
+      var t=localStorage.getItem('theme');
+      if(!t||t==='auto') t=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';
+      document.documentElement.setAttribute('data-theme',t);
+    }catch(e){}
+  })();
+</script>
 <title>KeploreAI — Production-Ready AI Systems, In Days</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -17,6 +26,7 @@ html{scroll-behavior:smooth;font-size:16px}
   --g:#1a6b5a;--g2:#14573f;--gl:#e8f3f0;--gb:#c8e8e0;--gm:rgba(26,107,90,.1);
   --b:#1d4ed8;--bl:#eff4fd;--bb:#dbeafe;
   --rust:#b85c38;
+  --navbg:rgba(255,255,255,.95);
   --fh:'Instrument Serif',Georgia,serif;
   --fb:'DM Sans',sans-serif;
   --fm:'DM Mono',monospace;
@@ -24,6 +34,20 @@ html{scroll-behavior:smooth;font-size:16px}
   --sh:0 1px 4px rgba(0,0,0,.06),0 2px 12px rgba(0,0,0,.04);
   --shl:0 6px 32px rgba(0,0,0,.09),0 2px 8px rgba(0,0,0,.04);
 }
+:root[data-theme="dark"]{
+  /* Apple Space Gray — warm near-black, soft surfaces, low contrast */
+  --w:#1c1c1e;--off:#232325;--off2:#2a2a2c;--off3:#343436;
+  --rule:#36363a;--rule2:#48484a;
+  --ink:#ebe9e4;--ink2:#d4d2cc;--mid:#a5a39c;--dim:#79776f;--dim2:#5a5853;
+  --g:#5bc9a9;--g2:#7ed6bc;--gl:#1f2e29;--gb:#2a4c44;--gm:rgba(91,201,169,.12);
+  --b:#7ea6ff;--bl:#1e2332;--bb:#2d3854;
+  --rust:#d68560;
+  --navbg:rgba(28,28,30,.82);
+  --sh:0 1px 4px rgba(0,0,0,.45),0 2px 12px rgba(0,0,0,.3);
+  --shl:0 6px 32px rgba(0,0,0,.55),0 2px 8px rgba(0,0,0,.35);
+}
+html{transition:background .25s ease,color .25s ease;}
+body,.sec,.sec.alt,.sec.alt2,nav,.pc,.wcard,.wdist{transition:background-color .25s ease,border-color .25s ease,color .25s ease;}
 body{font-family:var(--fb);background:var(--w);color:var(--ink);line-height:1.65;overflow-x:hidden;-webkit-font-smoothing:antialiased;}
 
 /* utils */
@@ -36,7 +60,13 @@ body{font-family:var(--fb);background:var(--w);color:var(--ink);line-height:1.65
 .d1{transition-delay:.08s}.d2{transition-delay:.16s}.d3{transition-delay:.24s}.d4{transition-delay:.32s}
 
 /* nav */
-nav{position:fixed;top:0;left:0;right:0;z-index:200;height:62px;display:flex;align-items:center;justify-content:space-between;padding:0 40px;background:rgba(255,255,255,.95);backdrop-filter:blur(14px);border-bottom:1px solid var(--rule);}
+nav{position:fixed;top:0;left:0;right:0;z-index:200;height:62px;display:flex;align-items:center;justify-content:space-between;padding:0 40px;background:var(--navbg);backdrop-filter:blur(14px);border-bottom:1px solid var(--rule);}
+.tt{width:34px;height:34px;border-radius:50%;border:1px solid var(--rule2);background:transparent;color:var(--ink2);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:color .15s,border-color .15s,background .15s;padding:0;flex-shrink:0;}
+.tt:hover{color:var(--ink);border-color:var(--ink);background:var(--off);}
+.tt svg{width:16px;height:16px;display:block;}
+.tt .ti-sun{display:none;}
+:root[data-theme="dark"] .tt .ti-sun{display:block;}
+:root[data-theme="dark"] .tt .ti-moon{display:none;}
 .nb{display:flex;align-items:center;gap:9px;text-decoration:none;}
 .nm{width:32px;height:32px;border-radius:8px;background:var(--ink);display:flex;align-items:center;justify-content:center;}
 .nm svg{width:18px;height:18px;}
@@ -1634,6 +1664,10 @@ document.head.appendChild(o)}initApollo();</script>
     <a href="#contact">Contact</a>
   </div>
   <div class="nr">
+    <button class="tt" onclick="toggleTheme()" aria-label="Toggle dark mode" title="Toggle theme">
+      <svg class="ti-moon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16.5 12.2A6.5 6.5 0 1 1 7.8 3.5a5 5 0 0 0 8.7 8.7z"/></svg>
+      <svg class="ti-sun" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="10" cy="10" r="3.4"/><path d="M10 1.8v2M10 16.2v2M1.8 10h2M16.2 10h2M4.1 4.1l1.4 1.4M14.5 14.5l1.4 1.4M4.1 15.9l1.4-1.4M14.5 5.5l1.4-1.4"/></svg>
+    </button>
     <div class="ndd" id="tryDrop">
       <div class="ns nds">
         <a href="https://lab.physmind.ai/" target="_blank" class="nds-main">Try PhysMind</a>
@@ -2188,6 +2222,7 @@ document.head.appendChild(o)}initApollo();</script>
 </footer>
 
 <script>
+function toggleTheme(){const cur=document.documentElement.getAttribute('data-theme')||'light';const next=cur==='dark'?'light':'dark';document.documentElement.setAttribute('data-theme',next);try{localStorage.setItem('theme',next);}catch(e){}}
 function toggleDrop(){const btn=document.querySelector('.nds-arrow');const menu=document.getElementById('tryMenu');const open=menu.classList.toggle('open');btn.classList.toggle('open',open);btn.setAttribute('aria-expanded',open);}
 document.addEventListener('click',e=>{if(!document.getElementById('tryDrop').contains(e.target)){document.getElementById('tryMenu').classList.remove('open');document.querySelector('.nds-arrow').classList.remove('open');}});
 const obs=new IntersectionObserver(e=>{e.forEach(en=>{if(en.isIntersecting)en.target.classList.add('in');});},{threshold:.08,rootMargin:'0px 0px -30px 0px'});
