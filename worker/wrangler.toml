@@ -1,0 +1,12 @@
+name = "keplore-contact"
+main = "contact.js"
+compatibility_date = "2025-01-01"
+
+# After deploy, set the Resend API key as a secret:
+#   wrangler secret put RESEND_API_KEY
+#
+# Optional env overrides:
+#   [vars]
+#   ALLOWED_ORIGINS = "https://keploreai.com,https://www.keploreai.com"
+#   TO_EMAIL = "support@keploreai.com"
+#   FROM_EMAIL = "Keplore Contact <contact@keploreai.com>"

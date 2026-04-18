@@ -1,0 +1,1460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Keplore AI — Industrial AI Perception Modules for Systems Integrators</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+
+/* ─── RESET ───────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; font-size: 16px; }
+
+/* ─── TOKENS (matched to main site) ───────────────────── */
+:root {
+  /* page + surfaces */
+  --bg0:    #ffffff;
+  --bg1:    #f8f8f6;
+  --bg2:    #ffffff;
+  --bg3:    #e8f3f0;
+  --bg4:    #f2f1ed;
+  --rule:   #e4e3de;
+  --rule2:  #d2d1ca;
+
+  /* type (light theme: dark ink on light bg) */
+  --t1:  #111110;
+  --t2:  #2c2c28;
+  --t3:  #6b6b64;
+  --t4:  #9b9b93;
+
+  /* accents — sage green primary (matches home), plus warm + blue */
+  --lime:   #1a6b5a;
+  --lime2:  #14573f;
+  --teal:   #1a6b5a;
+  --amber:  #b85c38;
+  --rust:   #b85c38;
+  --blue:   #1d4ed8;
+
+  /* type — editorial serif + DM sans/mono (matches home) */
+  --fh: 'Instrument Serif', Georgia, serif;
+  --fb: 'DM Sans', sans-serif;
+  --fm: 'DM Mono', monospace;
+
+  --r-sm: 8px;
+  --r-md: 12px;
+  --r-lg: 14px;
+  --r-xl: 22px;
+}
+
+body {
+  font-family: var(--fb);
+  background: var(--bg0);
+  color: var(--t1);
+  line-height: 1.65;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* atmospheric soft green glow behind hero */
+body::before {
+  content: '';
+  position: fixed; top: 0; left: 50%; transform: translateX(-50%);
+  width: 900px; height: 600px; border-radius: 50%; pointer-events: none; z-index: 0;
+  background: radial-gradient(ellipse at 50% 30%, rgba(26,107,90,.10) 0%, rgba(26,107,90,.04) 50%, transparent 75%);
+}
+
+/* ─── TYPOGRAPHY UTILITIES ────────────────────────────── */
+.eyebrow {
+  font-family: var(--fm); font-size: 11px; font-weight: 400;
+  letter-spacing: .12em; text-transform: uppercase; color: var(--lime);
+  display: flex; align-items: center; gap: 10px;
+}
+.eyebrow::before { content: ''; width: 16px; height: 1px; background: var(--lime); flex-shrink: 0; }
+
+h2.section-title {
+  font-family: var(--fh); font-weight: 400;
+  font-size: clamp(28px, 3.5vw, 44px);
+  line-height: 1.1; letter-spacing: -.025em; color: var(--t1);
+  margin-top: 12px; margin-bottom: 14px;
+}
+.section-sub {
+  font-size: 16px; font-weight: 400; color: var(--t2); line-height: 1.7;
+  max-width: 520px;
+}
+
+/* ─── NAV ─────────────────────────────────────────────── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+  height: 64px; display: flex; align-items: center;
+  justify-content: space-between; padding: 0 40px;
+  border-bottom: 1px solid var(--rule);
+  background: rgba(255,255,255,.95); backdrop-filter: blur(14px);
+}
+.nav-brand {
+  display: flex; align-items: center; gap: 9px; text-decoration: none;
+}
+.nav-mark {
+  width: 32px; height: 32px; border-radius: 8px;
+  background: var(--t1); position: relative; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+}
+.nav-mark svg path, .nav-mark svg circle { stroke: #fff; }
+.nav-mark svg { width: 16px; height: 16px; }
+.nav-wordmark {
+  font-family: var(--fh); font-size: 17px; font-weight: 700;
+  letter-spacing: -.03em; color: var(--t1);
+}
+.nav-wordmark span { color: var(--lime); font-weight: 700; font-size: 17px; margin-left: 0; letter-spacing: -.03em; }
+.nav-links {
+  display: flex; align-items: center; gap: 4px;
+}
+.nav-links a {
+  font-size: 15px; color: var(--t2); text-decoration: none;
+  padding: 6px 13px; border-radius: var(--r-sm);
+  transition: color .15s, background .15s; font-weight: 400;
+}
+.nav-links a:hover { color: var(--t1); background: rgba(26,107,90,.06); }
+.nav-links .nav-hi { color: var(--lime); font-weight: 500; }
+.nav-links .nav-hi:hover { color: var(--lime2); }
+.nav-cta {
+  background: var(--t1) !important; color: #fff !important;
+  padding: 7px 16px !important; border-radius: var(--r-sm);
+  font-weight: 500 !important; font-size: 13px !important;
+  transition: background .15s !important;
+}
+.nav-cta:hover { background: var(--t2) !important; }
+
+/* ─── HERO ────────────────────────────────────────────── */
+.hero {
+  min-height: 100vh;
+  display: grid; grid-template-columns: 1fr 1fr;
+  align-items: center; gap: 0;
+  padding: 100px 0 0;
+  position: relative; overflow: hidden;
+}
+
+/* teal line grid — matches homepage */
+.hero::before {
+  content: '';
+  position: absolute; inset: 0; pointer-events: none; z-index: 0;
+  background-image: linear-gradient(rgba(26,107,90,.025) 1px, transparent 1px), linear-gradient(90deg, rgba(26,107,90,.025) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: radial-gradient(ellipse 70% 80% at 30% 50%, black 20%, transparent 70%);
+}
+
+.hero-left {
+  padding: 80px 56px 80px 40px;
+  position: relative; z-index: 1;
+}
+.hero-right {
+  position: relative; z-index: 1;
+  align-self: stretch;
+  display: flex; flex-direction: column; justify-content: center;
+  border-left: 1px solid var(--rule);
+}
+
+.hero-eyebrow {
+  margin-bottom: 28px;
+  opacity: 0; animation: rise .5s ease .05s forwards;
+}
+
+.hero h1 {
+  font-family: var(--fh); font-weight: 400;
+  font-size: clamp(40px, 5.2vw, 72px);
+  line-height: 1.04; letter-spacing: -.04em; color: var(--t1);
+  margin-bottom: 26px;
+  opacity: 0; animation: rise .6s ease .15s forwards;
+}
+.hero h1 .hl { color: var(--lime); }
+.hero h1 .rule-word {
+  position: relative; display: inline-block;
+  text-decoration: line-through; text-decoration-color: rgba(184,92,56,.7);
+}
+
+.hero-body {
+  font-size: 16px; font-weight: 400; color: var(--t2);
+  line-height: 1.7; max-width: 500px; margin-bottom: 36px;
+  opacity: 0; animation: rise .6s ease .28s forwards;
+}
+.hero-body strong { color: var(--t1); font-weight: 500; }
+
+.hero-modules-strip {
+  display: flex; flex-direction: column; gap: 6px; margin-bottom: 40px;
+  opacity: 0; animation: rise .6s ease .38s forwards;
+}
+.module-tag {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: var(--fm); font-size: 11.5px; color: var(--t3);
+  letter-spacing: .04em;
+}
+.module-tag .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--lime); opacity: .5; }
+
+.hero-actions {
+  display: flex; align-items: center; gap: 12px;
+  opacity: 0; animation: rise .6s ease .48s forwards;
+}
+.btn-hero-p {
+  background: var(--lime); color: #fff;
+  padding: 15px 28px; border-radius: var(--r-sm);
+  font-weight: 500; font-size: 15px; font-family: var(--fb);
+  text-decoration: none; letter-spacing: 0;
+  display: inline-flex; align-items: center; gap: 7px;
+  transition: background .15s, transform .15s, box-shadow .15s;
+}
+.btn-hero-p:hover { background: var(--lime2); transform: translateY(-1px); box-shadow: 0 6px 22px rgba(26,107,90,.18); }
+.btn-hero-s {
+  color: var(--t1); font-size: 15px; text-decoration: none;
+  padding: 15px 24px; border-radius: var(--r-sm);
+  border: 1px solid var(--rule2); transition: all .15s;
+  font-weight: 500;
+}
+.btn-hero-s:hover { border-color: var(--t1); background: var(--bg1); }
+
+/* hero right: spec panel */
+.hero-panel {
+  padding: 48px 40px; height: 100%;
+  display: flex; flex-direction: column; gap: 24px;
+  opacity: 0; animation: rise .7s ease .3s forwards;
+}
+.hero-panel-label {
+  font-family: var(--fm); font-size: 10px; letter-spacing: .1em;
+  text-transform: uppercase; color: var(--t3); margin-bottom: 2px;
+}
+.spec-block {
+  background: var(--bg2); border: 1px solid var(--rule);
+  border-radius: var(--r-lg); padding: 20px 22px;
+  position: relative; overflow: hidden;
+}
+.spec-block::before {
+  content: ''; position: absolute; left: 0; top: 0; bottom: 0;
+  width: 3px;
+}
+.spec-block.v::before { background: var(--lime); }
+.spec-block.r::before { background: var(--lime); }
+.spec-block.i::before { background: var(--amber); }
+.spec-name {
+  font-family: var(--fh); font-size: 14px; font-weight: 600;
+  color: var(--t1); margin-bottom: 6px;
+}
+.spec-output {
+  font-family: var(--fm); font-size: 11px; color: var(--t3);
+  line-height: 1.6; letter-spacing: .01em;
+}
+.spec-output .out-label {
+  color: var(--t3); display: block; margin-bottom: 4px;
+  font-size: 10px; letter-spacing: .08em; text-transform: uppercase;
+}
+.spec-output .out-val { color: var(--t2); }
+
+/* ─── TRUST BAR ───────────────────────────────────────── */
+.trustbar {
+  display: flex; align-items: stretch;
+  border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule);
+  background: var(--bg1);
+}
+.trust-item {
+  flex: 1; padding: 24px 32px;
+  border-right: 1px solid var(--rule);
+  display: flex; flex-direction: column; gap: 4px;
+}
+.trust-item:last-child { border-right: none; }
+.trust-num {
+  font-family: var(--fm); font-size: 24px; font-weight: 500;
+  color: var(--lime); letter-spacing: -.04em;
+}
+.trust-label {
+  font-size: 12px; color: var(--t3); line-height: 1.45;
+}
+.trust-label strong { display: block; color: var(--t2); font-size: 13px; font-weight: 500; }
+
+/* ─── PROBLEM SECTION ─────────────────────────────────── */
+.section { padding: 100px 40px; }
+.section.alt { background: var(--bg1); }
+.section.alt2 { background: var(--bg2); }
+
+.problem-layout {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 72px;
+  align-items: start; margin-top: 64px;
+}
+.problem-pains { display: flex; flex-direction: column; gap: 14px; }
+.pain-card {
+  padding: 22px 24px; background: var(--bg2); border: 1px solid var(--rule);
+  border-radius: var(--r-lg); display: flex; gap: 16px; align-items: flex-start;
+  transition: border-color .2s;
+}
+.pain-card:hover { border-color: rgba(184,92,56,.35); }
+.pain-num {
+  font-family: var(--fm); font-size: 11px; color: var(--t4);
+  padding-top: 3px; flex-shrink: 0; width: 20px;
+}
+.pain-title { font-family: var(--fh); font-size: 14px; font-weight: 600; color: var(--t1); margin-bottom: 6px; }
+.pain-body { font-size: 13px; color: var(--t2); line-height: 1.55; }
+
+.problem-right { }
+.problem-verdict {
+  background: var(--bg2); border: 1px solid var(--rule); border-radius: var(--r-xl);
+  padding: 36px 32px;
+}
+.verdict-quote {
+  font-size: 18px; font-weight: 400; line-height: 1.6; color: var(--t1);
+  font-style: italic; margin-bottom: 20px; padding-left: 16px;
+  border-left: 3px solid var(--lime);
+}
+.verdict-source { font-family: var(--fm); font-size: 11px; color: var(--t3); margin-bottom: 28px; }
+.vs-list { display: flex; flex-direction: column; gap: 8px; }
+.vs-row {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 14px; border-radius: var(--r-md); font-size: 13px;
+}
+.vs-row.no { background: rgba(184,92,56,.07); color: var(--t2); }
+.vs-row.no::before { content: '✕'; color: var(--rust); font-size: 11px; font-weight: 700; flex-shrink: 0; }
+.vs-row.yes { background: rgba(26,107,90,.06); color: var(--t2); }
+.vs-row.yes::before { content: '✓'; color: var(--lime); font-size: 11px; font-weight: 700; flex-shrink: 0; }
+
+/* ─── MODULES SECTION ─────────────────────────────────── */
+.modules-grid {
+  display: grid; grid-template-columns: repeat(3,1fr);
+  gap: 2px; margin-top: 64px;
+  background: var(--rule); border-radius: var(--r-xl); overflow: hidden;
+}
+.module-card {
+  background: var(--bg1); padding: 36px 32px;
+  display: flex; flex-direction: column; gap: 0;
+  position: relative; overflow: hidden; transition: background .2s;
+}
+.module-card:hover { background: var(--bg2); }
+.module-accent {
+  position: absolute; top: 0; left: 0; right: 0; height: 3px;
+}
+.module-card.mv .module-accent { background: var(--lime); }
+.module-card.rg .module-accent { background: var(--lime); }
+.module-card.iv .module-accent { background: var(--amber); }
+
+.module-label {
+  font-family: var(--fm); font-size: 10px; letter-spacing: .1em;
+  text-transform: uppercase; color: var(--t3); margin-bottom: 12px; margin-top: 8px;
+}
+.module-card.mv .module-label { color: rgba(26,107,90,.8); }
+.module-card.rg .module-label { color: rgba(26,107,90,.7); }
+.module-card.iv .module-label { color: rgba(245,158,11,.7); }
+
+.module-name {
+  font-family: var(--fh); font-size: 22px; font-weight: 700;
+  letter-spacing: -.03em; color: var(--t1); margin-bottom: 20px;
+}
+.module-scope-title {
+  font-family: var(--fm); font-size: 10px; text-transform: uppercase;
+  letter-spacing: .1em; color: var(--t3); margin-bottom: 8px;
+}
+.module-scope-list { list-style: none; display: flex; flex-direction: column; gap: 5px; margin-bottom: 28px; }
+.module-scope-list li {
+  font-size: 13px; color: var(--t2); display: flex; gap: 8px; align-items: baseline;
+}
+.module-scope-list li::before { content: '—'; color: var(--t4); font-size: 11px; flex-shrink: 0; }
+
+.output-contract {
+  background: var(--bg3); border-radius: var(--r-md);
+  padding: 16px 16px; margin-top: auto;
+}
+.oc-label {
+  font-family: var(--fm); font-size: 9.5px; text-transform: uppercase;
+  letter-spacing: .1em; color: var(--t3); margin-bottom: 8px;
+}
+.oc-value { font-family: var(--fm); font-size: 11.5px; color: var(--t2); line-height: 1.65; }
+.oc-value .oc-hi { color: var(--lime); }
+.oc-value.rg .oc-hi { color: var(--lime); }
+.oc-value.iv .oc-hi { color: var(--amber); }
+
+/* module includes strip */
+.module-includes {
+  margin-top: 24px; background: var(--bg2); border: 1px solid var(--rule);
+  border-radius: var(--r-lg); padding: 24px 28px;
+}
+.mi-title {
+  font-family: var(--fm); font-size: 10px; text-transform: uppercase;
+  letter-spacing: .1em; color: var(--t3); margin-bottom: 14px;
+}
+.mi-grid {
+  display: flex; flex-wrap: wrap; gap: 8px;
+}
+.mi-item {
+  display: flex; align-items: center; gap: 6px;
+  background: var(--bg3); border: 1px solid var(--rule);
+  border-radius: 20px; padding: 5px 12px;
+  font-size: 12px; color: var(--t2);
+}
+.mi-item::before { content: '✓'; color: var(--lime); font-size: 11px; font-weight: 700; }
+
+/* ─── WHAT STAYS YOURS ────────────────────────────────── */
+.boundary-section {
+  padding: 100px 40px; background: var(--bg0);
+  border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule);
+}
+.boundary-layout {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 3px;
+  margin-top: 64px; border-radius: var(--r-xl); overflow: hidden;
+  background: var(--rule);
+}
+.boundary-col { padding: 44px 40px; }
+.boundary-col.theirs { background: var(--bg1); }
+.boundary-col.yours { background: var(--bg2); }
+.boundary-col-label {
+  font-family: var(--fm); font-size: 10px; letter-spacing: .1em;
+  text-transform: uppercase; margin-bottom: 20px;
+}
+.boundary-col.theirs .boundary-col-label { color: rgba(26,107,90,.7); }
+.boundary-col.yours .boundary-col-label { color: var(--t3); }
+.boundary-col-title {
+  font-family: var(--fh); font-size: 20px; font-weight: 700;
+  letter-spacing: -.02em; color: var(--t1); margin-bottom: 24px;
+}
+.boundary-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+.boundary-list li {
+  display: flex; align-items: center; gap: 10px;
+  font-size: 14px; line-height: 1.5;
+}
+.boundary-col.theirs .boundary-list li::before {
+  content: '✓'; color: var(--lime); font-size: 12px; font-weight: 700; flex-shrink: 0;
+}
+.boundary-col.yours .boundary-list li::before {
+  content: '→'; color: var(--t4); font-size: 12px; flex-shrink: 0;
+}
+.boundary-col.theirs .boundary-list li { color: var(--t1); }
+.boundary-col.yours .boundary-list li { color: var(--t2); }
+.boundary-note {
+  margin-top: 36px; padding-top: 20px; border-top: 1px solid var(--rule);
+  font-size: 13px; color: var(--t3); line-height: 1.55; font-style: italic;
+}
+.boundary-note strong { color: var(--t2); font-style: normal; }
+
+/* ─── HOW IT WORKS ────────────────────────────────────── */
+.steps-layout {
+  margin-top: 64px;
+  display: grid; grid-template-columns: repeat(5, 1fr); gap: 2px;
+  border-radius: var(--r-xl); overflow: hidden; background: var(--rule);
+}
+.step-card {
+  background: var(--bg1); padding: 32px 24px;
+  display: flex; flex-direction: column; gap: 0; transition: background .2s;
+}
+.step-card:hover { background: var(--bg2); }
+.step-n {
+  font-family: var(--fm); font-size: 11px; color: var(--t3);
+  margin-bottom: 18px; letter-spacing: .04em;
+}
+.step-title {
+  font-family: var(--fh); font-size: 16px; font-weight: 700;
+  letter-spacing: -.02em; color: var(--t1); margin-bottom: 12px;
+}
+.step-body { font-size: 13px; color: var(--t2); line-height: 1.6; margin-bottom: 16px; flex: 1; }
+
+.step-artifact {
+  font-family: var(--fm); font-size: 10px; color: var(--lime);
+  background: rgba(26,107,90,.06); border: 1px solid rgba(26,107,90,.15);
+  border-radius: 4px; padding: 4px 8px; display: inline-block;
+  letter-spacing: .03em;
+}
+
+/* ─── AFTER GO-LIVE ───────────────────────────────────── */
+.agl-layout {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 72px;
+  align-items: start; margin-top: 64px;
+}
+.agl-loop {
+  background: var(--bg2); border: 1px solid var(--rule); border-radius: var(--r-xl);
+  padding: 36px; display: flex; flex-direction: column; gap: 0;
+}
+.loop-steps { display: flex; flex-direction: column; }
+.loop-step {
+  display: flex; gap: 16px; align-items: flex-start; padding: 14px 0;
+  border-bottom: 1px solid var(--rule);
+  transition: background .15s;
+}
+.loop-step:last-child { border-bottom: none; }
+.loop-step-dot {
+  width: 28px; height: 28px; border-radius: 50%; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--fm); font-size: 10px; font-weight: 500;
+  background: var(--bg3); border: 1px solid var(--rule); color: var(--t3);
+  margin-top: 1px;
+}
+.loop-step.active .loop-step-dot { background: rgba(26,107,90,.1); border-color: rgba(200,241,53,.3); color: var(--lime); }
+.loop-step-title { font-family: var(--fh); font-size: 14px; font-weight: 600; color: var(--t1); margin-bottom: 3px; }
+.loop-step-body { font-size: 12px; color: var(--t3); line-height: 1.55; }
+.loop-step.active .loop-step-body { color: var(--t2); }
+
+.agl-right { }
+.agl-callout {
+  background: rgba(26,107,90,.05); border: 1px solid rgba(26,107,90,.15);
+  border-radius: var(--r-xl); padding: 28px 28px; margin-bottom: 20px;
+}
+.agl-callout-title {
+  font-family: var(--fh); font-size: 16px; font-weight: 700;
+  color: var(--t1); margin-bottom: 10px; letter-spacing: -.02em;
+}
+.agl-callout-body { font-size: 14px; color: var(--t2); line-height: 1.65; }
+.agl-callout-body em { font-style: normal; color: var(--lime); font-weight: 500; }
+.agl-promise {
+  background: var(--bg2); border: 1px solid var(--rule); border-radius: var(--r-xl);
+  padding: 28px;
+}
+.agl-promise-title {
+  font-family: var(--fm); font-size: 10px; text-transform: uppercase;
+  letter-spacing: .1em; color: var(--t3); margin-bottom: 16px;
+}
+.promise-rows { display: flex; flex-direction: column; gap: 10px; }
+.promise-row {
+  display: flex; gap: 10px; align-items: flex-start;
+  font-size: 13px; color: var(--t2); line-height: 1.5;
+}
+.promise-row::before { content: '→'; color: var(--lime); flex-shrink: 0; font-size: 12px; margin-top: 2px; }
+
+/* ─── SRES SECTION ────────────────────────────────────── */
+.sres-section {
+  padding: 100px 40px;
+  background: var(--bg0);
+  border-top: 1px solid var(--rule);
+  position: relative; overflow: hidden;
+}
+.sres-section::before {
+  content: 'SRES';
+  position: absolute; right: -20px; top: 50%; transform: translateY(-50%);
+  font-family: var(--fh); font-size: 220px; font-weight: 800;
+  color: rgba(17,17,16,.025); letter-spacing: -.1em; pointer-events: none;
+  line-height: 1;
+}
+.sres-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 72px; align-items: center; margin-top: 64px; }
+.sres-right { position: relative; }
+.sres-panel {
+  background: var(--bg2); border: 1px solid var(--rule); border-radius: var(--r-xl);
+  overflow: hidden;
+}
+.sres-panel-header {
+  padding: 14px 20px; border-bottom: 1px solid var(--rule);
+  display: flex; align-items: center; gap: 8px; background: var(--bg3);
+}
+.sres-dot { width: 8px; height: 8px; border-radius: 50%; }
+.sres-panel-title { font-family: var(--fm); font-size: 11px; color: var(--t3); margin-left: 6px; }
+.sres-log { padding: 20px; font-family: var(--fm); font-size: 11.5px; line-height: 1.9; }
+.sres-log .log-line { display: flex; gap: 10px; }
+.sres-log .ts { color: var(--t4); flex-shrink: 0; }
+.sres-log .ev { color: var(--t2); }
+.sres-log .ev.ok { color: var(--lime); }
+.sres-log .ev.run { color: var(--teal); }
+.sres-log .ev.val { color: var(--amber); }
+.sres-log .ev.dim { color: var(--t3); }
+
+.sres-stat-row { display: flex; gap: 16px; margin-top: 16px; }
+.sres-stat {
+  flex: 1; background: var(--bg3); border: 1px solid var(--rule);
+  border-radius: var(--r-md); padding: 16px;
+  text-align: center;
+}
+.sres-stat-num { font-family: var(--fm); font-size: 22px; font-weight: 500; color: var(--lime); letter-spacing: -.04em; }
+.sres-stat-label { font-size: 11px; color: var(--t3); margin-top: 3px; }
+
+.sres-bullets { display: flex; flex-direction: column; gap: 18px; margin-top: 8px; }
+.sres-bullet { display: flex; gap: 14px; align-items: flex-start; }
+.sres-bullet-icon {
+  width: 36px; height: 36px; border-radius: 9px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px; background: var(--bg2); border: 1px solid var(--rule);
+  color: var(--lime);
+}
+.sres-bullet-icon svg { width: 18px; height: 18px; display: block; }
+.sres-bullet-title { font-family: var(--fh); font-size: 14px; font-weight: 600; color: var(--t1); margin-bottom: 3px; }
+.sres-bullet-body { font-size: 13px; color: var(--t2); line-height: 1.55; }
+
+/* ─── EVIDENCE ────────────────────────────────────────── */
+.evidence-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: start; margin-top: 64px; }
+.evidence-panel {
+  background: var(--bg2); border: 1px solid var(--rule); border-radius: var(--r-xl);
+  overflow: hidden;
+}
+.ep-header {
+  padding: 14px 20px; border-bottom: 1px solid var(--rule);
+  background: var(--bg3); display: flex; align-items: center; gap: 6px;
+}
+.ep-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.ep-title { font-family: var(--fm); font-size: 11px; color: var(--t3); margin-left: 4px; }
+.ep-body { padding: 24px 22px; display: flex; flex-direction: column; gap: 0; }
+.ep-row {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 13px 0; border-bottom: 1px solid var(--rule);
+}
+.ep-row:last-child { border-bottom: none; }
+.ep-key { font-size: 13px; color: var(--t2); }
+.ep-val { font-family: var(--fm); font-size: 15px; font-weight: 500; color: var(--lime); }
+.ep-val.neutral { color: var(--teal); }
+.ep-val.zero { color: var(--lime); }
+.ep-footer {
+  padding: 14px 22px; border-top: 1px solid var(--rule);
+  background: var(--bg3); font-family: var(--fm); font-size: 10px;
+  color: var(--t3); line-height: 1.7;
+}
+
+.ev-right { }
+.ev-quote {
+  font-size: 18px; font-weight: 400; line-height: 1.65; color: var(--t1);
+  font-style: italic; padding-left: 18px; border-left: 3px solid var(--lime);
+  margin-bottom: 10px;
+}
+.ev-source { font-family: var(--fm); font-size: 11px; color: var(--t3); margin-bottom: 36px; }
+.ev-checks { display: flex; flex-direction: column; gap: 12px; }
+.ev-check {
+  display: flex; gap: 10px; align-items: flex-start;
+  font-size: 14px; color: var(--t2); line-height: 1.5;
+}
+.ev-check::before { content: '✓'; color: var(--lime); flex-shrink: 0; margin-top: 2px; font-size: 12px; font-weight: 700; }
+.ev-cta { margin-top: 32px; }
+.btn-outline {
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 11px 20px; border-radius: var(--r-sm);
+  border: 1px solid var(--rule2); color: var(--t2); font-size: 13px;
+  text-decoration: none; transition: all .15s;
+}
+.btn-outline:hover { border-color: rgba(255,255,255,.22); color: var(--t1); }
+
+/* ─── COMPARE ─────────────────────────────────────────── */
+.compare-wrap { margin-top: 64px; overflow-x: auto; border-radius: var(--r-xl); border: 1px solid var(--rule); }
+table.compare { width: 100%; border-collapse: collapse; }
+table.compare thead th {
+  padding: 14px 18px; font-family: var(--fm); font-size: 10px;
+  text-transform: uppercase; letter-spacing: .08em; color: var(--t3);
+  border-bottom: 1px solid var(--rule); text-align: center; white-space: nowrap;
+  background: var(--bg2);
+}
+table.compare thead th:first-child { text-align: left; }
+table.compare thead th.kep {
+  color: var(--lime); background: rgba(26,107,90,.05);
+  border-left: 1px solid rgba(26,107,90,.12);
+  border-right: 1px solid rgba(26,107,90,.12);
+}
+table.compare tbody td {
+  padding: 14px 18px; border-bottom: 1px solid var(--rule);
+  font-size: 13px; color: var(--t2); text-align: center; background: var(--bg1);
+}
+table.compare tbody td:first-child { text-align: left; color: var(--t2); font-size: 13px; }
+table.compare tbody td.kep {
+  background: rgba(26,107,90,.04); color: var(--lime); font-weight: 500;
+  border-left: 1px solid rgba(26,107,90,.1);
+  border-right: 1px solid rgba(26,107,90,.1);
+}
+table.compare tbody tr:last-child td { border-bottom: none; }
+table.compare tbody tr:last-child td.kep {
+  border-bottom: 1px solid rgba(26,107,90,.12);
+  border-radius: 0 0 0 0;
+}
+table.compare tbody tr:hover td { background: rgba(255,255,255,.015); }
+table.compare tbody tr:hover td.kep { background: rgba(26,107,90,.07); }
+.ct { color: #4ade80; }
+.cf { color: var(--t4); }
+.cp { font-size: 11px; color: var(--t3); }
+
+/* ─── TRACTION ────────────────────────────────────────── */
+.traction-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; margin-top: 48px; }
+.traction-card {
+  background: var(--bg2); border: 1px solid var(--rule); border-radius: var(--r-lg);
+  padding: 28px 24px;
+}
+.tc-tag {
+  display: inline-block; font-family: var(--fm); font-size: 10px;
+  text-transform: uppercase; letter-spacing: .08em; padding: 3px 9px;
+  border-radius: 4px; margin-bottom: 14px;
+}
+.tc-tag.customer { background: rgba(26,107,90,.08); color: var(--lime); border: 1px solid rgba(26,107,90,.2); }
+.tc-tag.partner { background: rgba(13,148,136,.08); color: var(--teal); border: 1px solid rgba(13,148,136,.2); }
+.tc-name { font-size: 16px; font-weight: 600; color: var(--t1); margin-bottom: 8px; letter-spacing: -.015em; }
+.tc-body { font-size: 13px; color: var(--t2); line-height: 1.6; margin-bottom: 16px; }
+.tc-metric { font-family: var(--fm); font-size: 11px; color: var(--t3); padding-top: 12px; border-top: 1px solid var(--rule); }
+.tc-metric span { color: var(--lime); }
+
+/* ─── CTA SECTION ─────────────────────────────────────── */
+.cta-section {
+  padding: 120px 40px; background: var(--bg1);
+  border-top: 1px solid var(--rule);
+  position: relative; overflow: hidden;
+}
+.cta-section::before {
+  content: '';
+  position: absolute; bottom: -200px; left: 50%; transform: translateX(-50%);
+  width: 600px; height: 600px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(26,107,90,.06) 0%, transparent 65%);
+  pointer-events: none;
+}
+.cta-inner { text-align: center; position: relative; z-index: 1; max-width: 620px; margin: 0 auto; }
+.cta-inner .eyebrow { justify-content: center; }
+.cta-inner .eyebrow::before { display: none; }
+.cta-title {
+  font-family: var(--fh); font-size: clamp(30px, 4vw, 52px);
+  font-weight: 700; letter-spacing: -.03em; line-height: 1.1;
+  color: var(--t1); margin-top: 14px; margin-bottom: 18px;
+}
+.cta-title .hl { color: var(--lime); }
+.cta-sub { font-size: 17px; font-weight: 400; color: var(--t2); line-height: 1.7; margin-bottom: 40px; }
+.cta-btns { display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 36px; }
+.btn-cta {
+  background: var(--lime); color: #000;
+  padding: 14px 30px; border-radius: var(--r-sm); font-family: var(--fh);
+  font-weight: 700; font-size: 16px; text-decoration: none;
+  letter-spacing: .04em; text-transform: uppercase; display: inline-flex; align-items: center; gap: 7px;
+  transition: background .15s, transform .15s;
+}
+.btn-cta:hover { background: var(--lime2); transform: translateY(-1px); }
+.btn-cta-2 {
+  padding: 14px 26px; border-radius: var(--r-sm);
+  border: 1px solid var(--rule2); color: var(--t2); font-size: 16px;
+  text-decoration: none; transition: all .15s;
+}
+.btn-cta-2:hover { border-color: var(--lime); color: var(--t1); }
+.cta-meta { display: flex; justify-content: center; gap: 28px; flex-wrap: wrap; }
+.cta-meta span { font-family: var(--fm); font-size: 12px; color: var(--t4); }
+
+/* ─── FOOTER ──────────────────────────────────────────── */
+footer {
+  background: var(--bg0); border-top: 1px solid var(--rule);
+  padding: 40px; display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: 20px;
+}
+.footer-brand {
+  display: flex; align-items: center; gap: 8px;
+  font-family: var(--fh); font-size: 16px; font-weight: 700; color: var(--t1);
+  text-decoration: none;
+}
+.footer-links { display: flex; gap: 24px; flex-wrap: wrap; }
+.footer-links a { font-size: 13px; color: var(--t3); text-decoration: none; transition: color .15s; }
+.footer-links a:hover { color: var(--t2); }
+.footer-copy { font-family: var(--fm); font-size: 11px; color: var(--t4); }
+
+/* ─── SCROLL REVEAL ───────────────────────────────────── */
+.reveal {
+  opacity: 0; transform: translateY(22px);
+  transition: opacity .65s ease, transform .65s ease;
+}
+.reveal.in { opacity: 1; transform: translateY(0); }
+.d1 { transition-delay: .08s; }
+.d2 { transition-delay: .16s; }
+.d3 { transition-delay: .24s; }
+.d4 { transition-delay: .32s; }
+.d5 { transition-delay: .40s; }
+
+/* ─── ANIMATIONS ──────────────────────────────────────── */
+@keyframes rise {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ─── RESPONSIVE ──────────────────────────────────────── */
+@media (max-width: 1024px) {
+  nav { padding: 0 20px; }
+  .nav-links { display: none; }
+  .hero { grid-template-columns: 1fr; padding-top: 80px; }
+  .hero-right { border-left: none; border-top: 1px solid var(--rule); }
+  .section { padding: 72px 20px; }
+  .boundary-section { padding: 72px 20px; }
+  .sres-section { padding: 72px 20px; }
+  .cta-section { padding: 80px 20px; }
+  .problem-layout, .agl-layout, .sres-layout, .evidence-layout { grid-template-columns: 1fr; gap: 40px; }
+  .boundary-layout { grid-template-columns: 1fr; }
+  .modules-grid { grid-template-columns: 1fr; }
+  .steps-layout { grid-template-columns: 1fr 1fr; }
+  .traction-grid { grid-template-columns: 1fr; }
+  .trustbar { flex-direction: column; }
+  .trust-item { border-right: none; border-bottom: 1px solid var(--rule); }
+  footer { flex-direction: column; text-align: center; }
+  .footer-links { justify-content: center; }
+}
+
+</style>
+</head>
+<body>
+
+<!-- ── NAV ──────────────────────────────────────────────── -->
+<nav>
+  <a href="index.html" class="nav-brand">
+    <div class="nav-mark">
+      <img src="logo.jpg" style="width:22px;height:22px;object-fit:contain;filter:invert(1);" alt="">
+    </div>
+    <span class="nav-wordmark">Keplore<span>AI</span></span>
+  </a>
+  <div class="nav-links">
+    <a href="#modules">Modules</a>
+    <a href="#how">Delivery</a>
+    <a href="#evidence">Validation</a>
+    <a href="#sres">Technology</a>
+    <a href="#integrators" class="nav-hi">For Integrators ↗</a>
+    <a href="#contact" class="nav-cta">Talk to us</a>
+  </div>
+</nav>
+
+
+<!-- ── HERO ─────────────────────────────────────────────── -->
+<div class="hero" id="top">
+
+  <div class="hero-left">
+    <div class="hero-eyebrow eyebrow">For Systems Integrators</div>
+    <h1>Industrial AI<br>perception modules<br>you can <span class="hl">ship</span> and<br>support.</h1>
+    <p class="hero-body">
+      Keplore delivers <strong>Vision Inspection, Robot Guidance, and Identification &amp; Verification</strong> — each packaged with defined acceptance criteria, a validation harness, FAT/SAT documentation, and a governed update process with rollback.
+    </p>
+    <div class="hero-modules-strip">
+      <div class="module-tag"><span class="dot"></span>Vision Inspection</div>
+      <div class="module-tag"><span class="dot"></span>Robot Guidance</div>
+      <div class="module-tag"><span class="dot"></span>Identification &amp; Verification</div>
+    </div>
+    <div class="hero-actions">
+      <a href="#contact" class="btn-hero-p">
+        Talk to our team
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M8 3l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+      <a href="#modules" class="btn-hero-s">See the modules</a>
+    </div>
+  </div>
+
+  <div class="hero-right">
+    <div class="hero-panel">
+      <div class="hero-panel-label">Output contracts — every module</div>
+
+      <div class="spec-block v">
+        <div class="spec-name">Vision Inspection</div>
+        <div class="spec-output">
+          <span class="out-label">Output contract</span>
+          <span class="out-val">Structured pass/fail · defect class · location · measurement · explicit unknown handling below threshold</span>
+        </div>
+      </div>
+
+      <div class="spec-block r">
+        <div class="spec-name">Robot Guidance</div>
+        <div class="spec-output">
+          <span class="out-label">Output contract</span>
+          <span class="out-val">Target position + pose · confidence score · defined low-confidence behaviors: re-acquire / retry / hold / divert</span>
+        </div>
+      </div>
+
+      <div class="spec-block i">
+        <div class="spec-name">Identification &amp; Verification</div>
+        <div class="spec-output">
+          <span class="out-label">Output contract</span>
+          <span class="out-val">ID + verify outputs · confidence score · NO_READ signaling · re-read triggering · exception hooks for routing logic</span>
+        </div>
+      </div>
+
+      <div style="font-family:var(--fm);font-size:10px;color:var(--t4);padding-top:4px;">
+        Every output is typed, bounded, and testable. No black boxes.
+      </div>
+    </div>
+  </div>
+
+</div>
+
+
+<!-- ── TRUST BAR ─────────────────────────────────────────── -->
+<div class="trustbar">
+  <div class="trust-item">
+    <div class="trust-num">Days</div>
+    <div class="trust-label"><strong>Pilot to validated</strong>not months — powered by SRES autonomous build engine</div>
+  </div>
+  <div class="trust-item">
+    <div class="trust-num">100%</div>
+    <div class="trust-label"><strong>Acceptance criteria</strong>defined before build starts on every engagement</div>
+  </div>
+  <div class="trust-item">
+    <div class="trust-num">FAT/SAT</div>
+    <div class="trust-label"><strong>Same document</strong>factory and site acceptance tested against identical criteria</div>
+  </div>
+  <div class="trust-item">
+    <div class="trust-num">0</div>
+    <div class="trust-label"><strong>Silent failures</strong>every output has defined handling for unknowns and edge cases</div>
+  </div>
+  <div class="trust-item">
+    <div class="trust-num">Governed</div>
+    <div class="trust-label"><strong>Every update</strong>you approve every change — nothing deploys without your sign-off</div>
+  </div>
+</div>
+
+
+<!-- ── PROBLEM ───────────────────────────────────────────── -->
+<section class="section alt" id="problem">
+  <div class="eyebrow reveal">The Problem</div>
+  <h2 class="section-title reveal">Your customers need AI<br>perception. Standard tools<br>won't hold up.</h2>
+  <p class="section-sub reveal">Three failure modes keep appearing on industrial lines — and they're getting more common as AI adoption accelerates.</p>
+
+  <div class="problem-layout">
+    <div class="problem-pains">
+      <div class="pain-card reveal d1">
+        <div class="pain-num">01</div>
+        <div>
+          <div class="pain-title">Rules-based vision breaks when conditions change</div>
+          <div class="pain-body">Lighting shifts, new product variants, fixture tolerances — traditional machine vision requires manual recalibration every time. The line stops. The integrator gets the call.</div>
+        </div>
+      </div>
+      <div class="pain-card reveal d2">
+        <div class="pain-num">02</div>
+        <div>
+          <div class="pain-title">AI models work in demos, fall apart in production</div>
+          <div class="pain-body">Most AI inspection tools deliver a model and walk away. No acceptance criteria, no validation evidence, no plan for when accuracy degrades six months after go-live. The integrator inherits the support problem.</div>
+        </div>
+      </div>
+      <div class="pain-card reveal d3">
+        <div class="pain-num">03</div>
+        <div>
+          <div class="pain-title">Building AI in-house is slow, expensive, and risky</div>
+          <div class="pain-body">Manual ML engineering takes one engineer two to three months per deployment with no self-adaptation. Teams without deep AI expertise can't maintain it after handoff. Projects stall or regress.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="problem-right reveal d1">
+      <div class="problem-verdict">
+        <div class="verdict-quote">"We need AI inspection that stays accurate when conditions change — not just something that passes a demo."</div>
+        <div class="verdict-source">— Head of Engineering, Tier 1 automotive supplier</div>
+        <div class="vs-list">
+          <div class="vs-row no">Traditional integrators: custom builds, brittle over time, no AI update lifecycle</div>
+          <div class="vs-row no">AI vision platforms: software-only, no commissioning package, no post-go-live model</div>
+          <div class="vs-row no">Rules-based vision: accurate at install, breaks when the environment drifts</div>
+          <div class="vs-row yes">Keplore: production-ready modules, validated, governed, maintainable</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ── MODULES ───────────────────────────────────────────── -->
+<section class="section" id="modules">
+  <div class="eyebrow reveal">Production Modules</div>
+  <h2 class="section-title reveal">Three modules.<br>One commissioning<br>standard.</h2>
+  <p class="section-sub reveal">Productized across cells and lines. Each module ships with the same package — scope-bounded, output-defined, validation-ready.</p>
+
+  <div class="modules-grid">
+
+    <div class="module-card mv reveal">
+      <div class="module-accent"></div>
+      <div class="module-label">Module 01</div>
+      <div class="module-name">Vision<br>Inspection</div>
+      <div class="module-scope-title">Scope</div>
+      <ul class="module-scope-list">
+        <li>Defect detection &amp; measurement</li>
+        <li>Surface, dimensional &amp; cosmetic checks</li>
+        <li>Variable lighting &amp; mixed SKUs</li>
+        <li>Constrained viewpoints</li>
+      </ul>
+      <div class="output-contract">
+        <div class="oc-label">Output contract</div>
+        <div class="oc-value">
+          <span class="oc-hi">Structured pass/fail</span> with defect class, location, and measurement — plus explicit unknown handling below threshold. Not advisory. Actionable.
+        </div>
+      </div>
+    </div>
+
+    <div class="module-card rg reveal d1">
+      <div class="module-accent"></div>
+      <div class="module-label">Module 02</div>
+      <div class="module-name">Robot<br>Guidance</div>
+      <div class="module-scope-title">Scope</div>
+      <ul class="module-scope-list">
+        <li>Pick, place, insertion &amp; alignment</li>
+        <li>Variable fixtures &amp; lighting conditions</li>
+        <li>No hand-tuning per configuration</li>
+        <li>High-repeatability workcells</li>
+      </ul>
+      <div class="output-contract">
+        <div class="oc-label">Output contract</div>
+        <div class="oc-value rg">
+          <span class="oc-hi">Target position + pose</span> with confidence score — plus defined low-confidence behaviors: re-acquire / retry / hold / divert. The controller always knows what to do.
+        </div>
+      </div>
+    </div>
+
+    <div class="module-card iv reveal d2">
+      <div class="module-accent"></div>
+      <div class="module-label">Module 03</div>
+      <div class="module-name">ID &amp;<br>Verification</div>
+      <div class="module-scope-title">Scope</div>
+      <ul class="module-scope-list">
+        <li>Label, logo, mark &amp; count verification</li>
+        <li>Character ambiguity &amp; partial occlusion</li>
+        <li>Industrial packaging &amp; logistics</li>
+        <li>Exception routing for automation</li>
+      </ul>
+      <div class="output-contract">
+        <div class="oc-label">Output contract</div>
+        <div class="oc-value iv">
+          <span class="oc-hi">ID + verify outputs</span> with confidence score — NO_READ signaling, re-read triggering, and exception hooks for routing logic. Designed for downstream automation.
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="module-includes reveal">
+    <div class="mi-title">Every module includes</div>
+    <div class="mi-grid">
+      <div class="mi-item">Acceptance criteria + evidence pack</div>
+      <div class="mi-item">Interface spec + validation harness</div>
+      <div class="mi-item">Update-ready regression suite</div>
+      <div class="mi-item">Versioned releases + rollback</div>
+      <div class="mi-item">Runbook + rollback procedure</div>
+      <div class="mi-item">FAT / SAT documentation</div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ── WHAT STAYS YOURS ──────────────────────────────────── -->
+<div class="boundary-section" id="integrators">
+  <div class="eyebrow reveal">Scope Boundary</div>
+  <h2 class="section-title reveal">We handle the AI.<br>You keep everything else.</h2>
+  <p class="section-sub reveal">The boundary between Keplore's scope and yours is explicit, respected, and designed to protect your business model and your customer relationship.</p>
+
+  <div class="boundary-layout">
+    <div class="boundary-col theirs reveal">
+      <div class="boundary-col-label">Keplore handles</div>
+      <div class="boundary-col-title">The AI perception problem.</div>
+      <ul class="boundary-list">
+        <li>AI model design, training, and validation</li>
+        <li>Acceptance criteria definition and evidence</li>
+        <li>Validation harness and FAT/SAT documentation</li>
+        <li>Post-deployment drift detection and updates</li>
+        <li>Governed release process with rollback</li>
+        <li>Regression testing on every change</li>
+        <li>Versioned artifacts with full audit trail</li>
+      </ul>
+      <div class="boundary-note">
+        Keplore is the AI component. We do not touch cell architecture, robot programming, or safety systems. That's intentional.
+      </div>
+    </div>
+
+    <div class="boundary-col yours reveal d1">
+      <div class="boundary-col-label">Stays with you</div>
+      <div class="boundary-col-title">Your business, intact.</div>
+      <ul class="boundary-list">
+        <li>PLC and robot programming</li>
+        <li>Safety systems and cell architecture</li>
+        <li>Commissioning process and timeline</li>
+        <li>Customer relationship and project ownership</li>
+        <li>System integration and site support</li>
+        <li>Mechanical design and hardware selection</li>
+      </ul>
+      <div class="boundary-note">
+        <strong>Keplore does not compete with your integration business.</strong> You retain the customer, the contract, and the ongoing support relationship. We are the AI component you commission, deliver, and hand off.
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ── DELIVERY PLAYBOOK ─────────────────────────────────── -->
+<section class="section alt2" id="how">
+  <div class="eyebrow reveal">Delivery Playbook</div>
+  <h2 class="section-title reveal">Same five steps.<br>Same outputs.<br>Every engagement.</h2>
+  <p class="section-sub reveal">A repeatable structure with defined artifacts at every gate. No milestone closes without sign-off.</p>
+
+  <div class="steps-layout">
+    <div class="step-card reveal">
+      <div class="step-n">01</div>
+      <div class="step-title">Define acceptance</div>
+      <div class="step-body">Success criteria, thresholds, failure modes, unknown rules. Nothing begins without this. The acceptance criteria document is reviewed and approved before build starts.</div>
+      <div class="step-artifact">acceptance criteria doc</div>
+    </div>
+    <div class="step-card reveal d1">
+      <div class="step-n">02</div>
+      <div class="step-title">Data + edge plan</div>
+      <div class="step-body">Coverage for production scenarios and the edge cases that matter. Agreed upfront, not discovered at go-live. Every failure mode with a name is a failure mode with a plan.</div>
+      <div class="step-artifact">capture plan + labeling guide</div>
+    </div>
+    <div class="step-card reveal d2">
+      <div class="step-n">03</div>
+      <div class="step-title">Baseline + risks</div>
+      <div class="step-body">Early performance report plus top failure modes identified. First opportunity to surface scope issues before they become schedule problems. Shared before any integration work begins.</div>
+      <div class="step-artifact">baseline report + risk list</div>
+    </div>
+    <div class="step-card reveal d3">
+      <div class="step-n">04</div>
+      <div class="step-title">Integrate + validate early</div>
+      <div class="step-body">Interface spec and validation harness delivered so your team can integrate and validate while Keplore tunes. Parallel workstreams. You're not waiting on us to start your work.</div>
+      <div class="step-artifact">interface spec + validation harness</div>
+    </div>
+    <div class="step-card reveal d4">
+      <div class="step-n">05</div>
+      <div class="step-title">Ship the package</div>
+      <div class="step-body">Acceptance pack for FAT/SAT plus an update-ready validation pipeline — regression, evidence, rollback. Deployment-ready. Commissionable. Supportable after go-live.</div>
+      <div class="step-artifact">deployment-ready module package</div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ── AFTER GO-LIVE ─────────────────────────────────────── -->
+<section class="section" id="golive">
+  <div class="eyebrow reveal">After Go-Live</div>
+  <h2 class="section-title reveal">Maintained under control.<br>Not handed off<br>and forgotten.</h2>
+  <p class="section-sub reveal">When conditions change — new SKU, lighting shift, fixture tolerance drift — the system surfaces it, proposes a candidate update, then verifies it before release.</p>
+
+  <div class="agl-layout">
+    <div class="agl-loop reveal">
+      <div class="mi-title" style="margin-bottom:20px;">Update-ready validation pipeline</div>
+      <div class="loop-steps">
+        <div class="loop-step active">
+          <div class="loop-step-dot">01</div>
+          <div><div class="loop-step-title">Monitor</div><div class="loop-step-body">Continuous drift detection across production performance indicators.</div></div>
+        </div>
+        <div class="loop-step active">
+          <div class="loop-step-dot">02</div>
+          <div><div class="loop-step-title">Capture</div><div class="loop-step-body">Automated capture of edge cases and distribution shifts as they occur.</div></div>
+        </div>
+        <div class="loop-step active">
+          <div class="loop-step-dot">03</div>
+          <div><div class="loop-step-title">Propose</div><div class="loop-step-body">System proposes a candidate update with supporting evidence. You review it.</div></div>
+        </div>
+        <div class="loop-step active">
+          <div class="loop-step-dot">04</div>
+          <div><div class="loop-step-title">You approve</div><div class="loop-step-body">Nothing changes in production without your authorization. Every engagement.</div></div>
+        </div>
+        <div class="loop-step active">
+          <div class="loop-step-dot">05</div>
+          <div><div class="loop-step-title">Validate</div><div class="loop-step-body">Update verified against regression coverage, packaged with evidence before release.</div></div>
+        </div>
+        <div class="loop-step active">
+          <div class="loop-step-dot">06</div>
+          <div><div class="loop-step-title">Deploy / Rollback</div><div class="loop-step-body">Staged deployment. Full rollback available at every stage. Audit trail maintained throughout.</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="agl-right reveal d1">
+      <div class="agl-callout">
+        <div class="agl-callout-title">This is not autonomous.</div>
+        <div class="agl-callout-body">
+          Every change is <em>governed, documented, and reversible</em>. Your customer can ask what changed and why — and you will have the answer. The update system is automated in its detection and proposal; it is human-authorized in its deployment. These are not the same thing.
+        </div>
+      </div>
+      <div class="agl-promise">
+        <div class="agl-promise-title">What this means for you</div>
+        <div class="promise-rows">
+          <div class="promise-row">Your customer's line adapts to new SKUs without a site visit</div>
+          <div class="promise-row">You have an answer when the customer asks "what changed?"</div>
+          <div class="promise-row">No surprise regressions — every update is regression-tested first</div>
+          <div class="promise-row">Rollback is available if a version underperforms in production</div>
+          <div class="promise-row">Your support burden stays bounded, even as the environment evolves</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ── VALIDATION EVIDENCE ───────────────────────────────── -->
+<section class="section alt" id="evidence">
+  <div class="eyebrow reveal">Validation Evidence</div>
+  <h2 class="section-title reveal">Real metrics.<br>Not marketing claims.</h2>
+  <p class="section-sub reveal">Manufacturing buyers need proof. Here's what a Keplore deployment actually produces.</p>
+
+  <div class="evidence-layout">
+    <div class="reveal">
+      <div class="evidence-panel">
+        <div class="ep-header">
+          <div class="ep-dot" style="background:#22c55e"></div>
+          <div class="ep-dot" style="background:#f59e0b;margin-left:4px"></div>
+          <div class="ep-dot" style="background:#ef4444;margin-left:4px"></div>
+          <div class="ep-title">deployment_log — automotive cosmetic inspection</div>
+        </div>
+        <div class="ep-body">
+          <div class="ep-row"><span class="ep-key">Module type</span><span class="ep-val" style="color:var(--t2);font-size:13px">Vision Inspection</span></div>
+          <div class="ep-row"><span class="ep-key">Accuracy at commissioning</span><span class="ep-val">98.1%</span></div>
+          <div class="ep-row"><span class="ep-key">Accuracy at 90-day mark</span><span class="ep-val">97.4%</span></div>
+          <div class="ep-row"><span class="ep-key">False positive rate</span><span class="ep-val neutral">0.8%</span></div>
+          <div class="ep-row"><span class="ep-key">Product variants handled</span><span class="ep-val">14</span></div>
+          <div class="ep-row"><span class="ep-key">Model updates deployed</span><span class="ep-val">3</span></div>
+          <div class="ep-row"><span class="ep-key">Validation incidents</span><span class="ep-val zero">0</span></div>
+          <div class="ep-row"><span class="ep-key">Line stoppages (vision)</span><span class="ep-val zero">0</span></div>
+        </div>
+        <div class="ep-footer">
+          All 3 updates validated against regression suite before deployment · Performance monitoring active throughout · FAT and SAT ran against same acceptance criteria document
+        </div>
+      </div>
+    </div>
+
+    <div class="ev-right reveal d1">
+      <blockquote class="ev-quote">
+        "What sold us wasn't the accuracy numbers. It was that they could tell us exactly what the system would and wouldn't handle, and prove it."
+      </blockquote>
+      <div class="ev-source">— Automation Engineering Lead, precision parts manufacturer</div>
+      <div class="ev-checks">
+        <div class="ev-check">Acceptance criteria agreed and documented before any build work begins</div>
+        <div class="ev-check">Test results and validation evidence provided before go-live — not after</div>
+        <div class="ev-check">Model updates go through the same validation process as initial deployments</div>
+        <div class="ev-check">All failure modes documented and operationalized in the delivery package</div>
+        <div class="ev-check">Your customer can audit the system — every decision has a traceable rationale</div>
+      </div>
+      <div class="ev-cta">
+        <a href="#contact" class="btn-outline">Request validation white paper →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ── SRES TECHNOLOGY ───────────────────────────────────── -->
+<section class="sres-section" id="sres">
+  <div class="eyebrow reveal">The Engine</div>
+  <h2 class="section-title reveal">Days, not months.</h2>
+  <p class="section-sub reveal">Keplore modules are built and validated by SRES — an autonomous AI system builder that runs experiments, compares candidates, and validates performance without manual ML engineering at every step.</p>
+
+  <div class="sres-layout">
+    <div class="sres-bullets reveal">
+      <div class="sres-bullet">
+        <div class="sres-bullet-icon" aria-hidden="true"><svg viewBox="0 0 20 20" fill="currentColor"><circle cx="5" cy="15" r="1.8"/><circle cx="10" cy="10" r="1.8"/><circle cx="15" cy="5" r="1.8"/></svg></div>
+        <div>
+          <div class="sres-bullet-title">Autonomous experimentation</div>
+          <div class="sres-bullet-body">SRES runs multiple model candidates, compares results, tunes hyperparameters, and identifies failure modes — without requiring a human ML engineer at every step.</div>
+        </div>
+      </div>
+      <div class="sres-bullet">
+        <div class="sres-bullet-icon" aria-hidden="true"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="14" height="14" rx="1.2"/><rect x="6.8" y="6.8" width="6.4" height="6.4" rx=".6"/></svg></div>
+        <div>
+          <div class="sres-bullet-title">Multi-layer validation</div>
+          <div class="sres-bullet-body">Nothing is declared done until it has passed mathematical reasoning checks, OS-level process verification, and semantic validation — simultaneously. This is what makes SRES production-safe.</div>
+        </div>
+      </div>
+      <div class="sres-bullet">
+        <div class="sres-bullet-icon" aria-hidden="true"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M16.5 10a6.5 6.5 0 1 1-1.9-4.6"/><path d="M16.5 3.5v3.8h-3.8"/></svg></div>
+        <div>
+          <div class="sres-bullet-title">Self-adapting in production</div>
+          <div class="sres-bullet-body">The same engine that builds the module also maintains it. When the production environment drifts, SRES detects it, proposes an update, and prepares the regression evidence — before any human reviews it.</div>
+        </div>
+      </div>
+      <div class="sres-bullet">
+        <div class="sres-bullet-icon" aria-hidden="true"><svg viewBox="0 0 20 20" fill="currentColor"><rect x="3.5" y="12" width="3" height="5" rx=".6"/><rect x="8.5" y="8" width="3" height="9" rx=".6"/><rect x="13.5" y="4" width="3" height="13" rx=".6"/></svg></div>
+        <div>
+          <div class="sres-bullet-title">What this means for the schedule</div>
+          <div class="sres-bullet-body">A traditional ML engineering engagement takes one engineer 2–3 months per deployment. Keplore delivers in days. That speed advantage compounds across every project in your pipeline.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sres-right reveal d1">
+      <div class="sres-panel">
+        <div class="sres-panel-header">
+          <div class="sres-dot" style="background:#22c55e"></div>
+          <div class="sres-dot" style="background:#f59e0b;margin-left:4px"></div>
+          <div class="sres-dot" style="background:#ef4444;margin-left:4px"></div>
+          <div class="sres-panel-title">sres_build.log — vision_inspection_v1</div>
+        </div>
+        <div class="sres-log">
+          <div class="log-line"><span class="ts">00:01</span><span class="ev dim">problem scope parsed · acceptance criteria loaded</span></div>
+          <div class="log-line"><span class="ts">00:04</span><span class="ev run">experiment set initialized · 12 candidates queued</span></div>
+          <div class="log-line"><span class="ts">00:31</span><span class="ev dim">candidate 01–04 evaluated · 3 eliminated on latency</span></div>
+          <div class="log-line"><span class="ts">01:12</span><span class="ev run">top 3 candidates advancing · hyperparameter sweep running</span></div>
+          <div class="log-line"><span class="ts">02:48</span><span class="ev dim">failure mode analysis · 2 edge cases flagged</span></div>
+          <div class="log-line"><span class="ts">03:10</span><span class="ev run">edge cases captured · labeling guide updated</span></div>
+          <div class="log-line"><span class="ts">05:22</span><span class="ev val">validation pass 1 · accuracy 96.8% · threshold: 95%  ✓</span></div>
+          <div class="log-line"><span class="ts">06:01</span><span class="ev val">false positive rate 1.2% · threshold: 2.0%  ✓</span></div>
+          <div class="log-line"><span class="ts">06:44</span><span class="ev run">regression suite compiled · 847 test cases</span></div>
+          <div class="log-line"><span class="ts">07:30</span><span class="ev ok">acceptance criteria met · evidence pack generated ✓</span></div>
+          <div class="log-line"><span class="ts">07:31</span><span class="ev ok">module ready for integration handoff ✓</span></div>
+        </div>
+      </div>
+      <div class="sres-stat-row">
+        <div class="sres-stat">
+          <div class="sres-stat-num">~7h</div>
+          <div class="sres-stat-label">build to evidence pack</div>
+        </div>
+        <div class="sres-stat">
+          <div class="sres-stat-num">90%</div>
+          <div class="sres-stat-label">faster than manual ML</div>
+        </div>
+        <div class="sres-stat">
+          <div class="sres-stat-num">847</div>
+          <div class="sres-stat-label">test cases generated</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ── COMPARISON ────────────────────────────────────────── -->
+<section class="section alt" id="compare">
+  <div class="eyebrow reveal">Why Not The Alternatives</div>
+  <h2 class="section-title reveal">Where every other option<br>leaves you exposed.</h2>
+  <p class="section-sub reveal">Compared on the things that matter after go-live, not just at demo day.</p>
+
+  <div class="compare-wrap reveal">
+    <table class="compare">
+      <thead>
+        <tr>
+          <th></th>
+          <th>Traditional Integrators</th>
+          <th>AI Vision Platforms</th>
+          <th>Rules-based Vision</th>
+          <th class="kep">Keplore</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Defined acceptance criteria upfront</td>
+          <td><span class="cp">Sometimes</span></td>
+          <td><span class="cf">—</span></td>
+          <td><span class="cp">Basic</span></td>
+          <td class="kep"><span class="ct">✓ Always</span></td>
+        </tr>
+        <tr>
+          <td>Validation evidence at handoff</td>
+          <td><span class="cp">Varies</span></td>
+          <td><span class="cf">—</span></td>
+          <td><span class="cp">Partial</span></td>
+          <td class="kep"><span class="ct">✓ Every module</span></td>
+        </tr>
+        <tr>
+          <td>Handles variable environments + drift</td>
+          <td><span class="cp">Limited</span></td>
+          <td><span class="ct">✓</span></td>
+          <td><span class="cf">—</span></td>
+          <td class="kep"><span class="ct">✓ Designed for it</span></td>
+        </tr>
+        <tr>
+          <td>Governed update process post-go-live</td>
+          <td><span class="cf">—</span></td>
+          <td><span class="cf">—</span></td>
+          <td><span class="cf">—</span></td>
+          <td class="kep"><span class="ct">✓ Standard</span></td>
+        </tr>
+        <tr>
+          <td>FAT/SAT documentation package</td>
+          <td><span class="cp">Varies</span></td>
+          <td><span class="cf">—</span></td>
+          <td><span class="cp">Partial</span></td>
+          <td class="kep"><span class="ct">✓ Every engagement</span></td>
+        </tr>
+        <tr>
+          <td>Defined output contracts (no black box)</td>
+          <td><span class="cf">—</span></td>
+          <td><span class="cf">—</span></td>
+          <td><span class="ct">✓</span></td>
+          <td class="kep"><span class="ct">✓ Every module</span></td>
+        </tr>
+        <tr>
+          <td>Rollback on every update</td>
+          <td><span class="cf">—</span></td>
+          <td><span class="cf">—</span></td>
+          <td><span class="cf">—</span></td>
+          <td class="kep"><span class="ct">✓ Built in</span></td>
+        </tr>
+        <tr>
+          <td>Pilot to deployment in days</td>
+          <td><span class="cf">—</span></td>
+          <td><span class="cp">Sometimes</span></td>
+          <td><span class="cf">—</span></td>
+          <td class="kep"><span class="ct">✓ SRES-powered</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+
+<!-- ── TRACTION ──────────────────────────────────────────── -->
+<section class="section alt2" id="traction">
+  <div class="eyebrow reveal">Traction</div>
+  <h2 class="section-title reveal">Deployed. Validated.<br>In production.</h2>
+  <p class="section-sub reveal">Real engagements using the same modules and playbook described on this page.</p>
+
+  <div class="traction-grid">
+    <div class="traction-card reveal">
+      <div class="tc-tag customer">Paying customer</div>
+      <div class="tc-name">Global Magnetics Supplier</div>
+      <div class="tc-body">EV and smart home OEM supplier. Vision Inspection module deployed across 2 machines. Deployment scale target: 1,000–5,000 machines per year.</div>
+      <div class="tc-metric">
+        Before: <span>1 engineer · 2–3 months · no self-adaptation</span><br>
+        After: <span>3–7 days · continuous self-adaptation · 90% faster</span>
+      </div>
+    </div>
+    <div class="traction-card reveal d1">
+      <div class="tc-tag customer">Paying customer</div>
+      <div class="tc-name">Robot Co. — Idaho</div>
+      <div class="tc-body">Design-for-manufacturing application. Robot Guidance module. $5K–$20K per machine installation, $1K–$10K annual subscription. 30–50 machine deployment target.</div>
+      <div class="tc-metric">Module: <span>Robot Guidance</span> · Status: <span>Active deployment</span></div>
+    </div>
+    <div class="traction-card reveal d2">
+      <div class="tc-tag partner">Strategic partner</div>
+      <div class="tc-name">Emerson Electric</div>
+      <div class="tc-body">$18B global automation company. Partnership to provide Keplore AI modules to Emerson's industrial customers — a channel that reaches deep into the exact integrator and manufacturer base Keplore serves.</div>
+      <div class="tc-metric">Revenue: <span>$18B (2025)</span> · Type: <span>Channel partnership</span></div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ── CTA ───────────────────────────────────────────────── -->
+<section class="cta-section" id="contact">
+  <div class="cta-inner">
+    <div class="eyebrow" style="justify-content:center">Get Started</div>
+    <h2 class="cta-title">Have a perception<br>problem your current<br>tools <span class="hl">can't solve?</span></h2>
+    <p class="cta-sub">Tell us what you're building. We'll scope the problem, define acceptance criteria, and tell you honestly whether Keplore is the right fit.</p>
+    <div class="cta-btns">
+      <a href="#contact" data-contact class="btn-cta">
+        Talk to our team
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M8 3l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+      <a href="#how" class="btn-cta-2">Review the playbook first</a>
+    </div>
+    <div class="cta-meta">
+      <span>→ No commitment required</span>
+      <span>→ 30-min scoping call</span>
+      <span>→ Real engineers on the call</span>
+    </div>
+  </div>
+</section>
+
+
+<!-- ── FOOTER ────────────────────────────────────────────── -->
+<footer>
+  <a href="index.html" class="footer-brand">
+    <div class="nav-mark" style="width:26px;height:26px;border-radius:6px;">
+      <img src="logo.jpg" style="width:16px;height:16px;object-fit:contain;filter:invert(1);" alt="">
+    </div>
+    Keplore AI
+  </a>
+  <div class="footer-links">
+    <a href="#modules">Modules</a>
+    <a href="#how">Delivery</a>
+    <a href="#evidence">Validation</a>
+    <a href="#integrators">For Integrators</a>
+    <a href="#sres">Technology</a>
+    <a href="#contact">Contact</a>
+  </div>
+  <div class="footer-copy">© 2026 KeploreAI Inc. · Santa Clara, CA</div>
+</footer>
+
+
+<script>
+// Scroll reveal
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in'); });
+}, { threshold: 0.08, rootMargin: '0px 0px -32px 0px' });
+document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+// Nav active state
+const sections = document.querySelectorAll('[id]');
+const links = document.querySelectorAll('.nav-links a[href^="#"]');
+window.addEventListener('scroll', () => {
+  let cur = '';
+  sections.forEach(s => { if (window.scrollY >= s.offsetTop - 80) cur = s.id; });
+  links.forEach(a => {
+    const isActive = a.getAttribute('href') === '#' + cur;
+    if (!a.classList.contains('nav-cta') && !a.classList.contains('nav-hi')) {
+      a.style.color = isActive ? 'var(--t1)' : '';
+    }
+  });
+}, { passive: true });
+</script>
+
+<!-- Contact form modal -->
+<script src="contact-form.js" defer></script>
+
+</body>
+</html>
